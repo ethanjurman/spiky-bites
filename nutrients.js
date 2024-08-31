@@ -481,6 +481,7 @@ const nutrients = [
 const nutrientsElement = document.getElementById("nutrients")
 nutrients.forEach(item => {
   const newOption = document.createElement("option")
-  newOption.value = `${item.name} (${item.unitName})`;
+  newOption.innerText = `${item.name} (${item.unitName})`
+  newOption.value = item.name;
   nutrientsElement.appendChild(newOption)
 })

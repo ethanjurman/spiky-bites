@@ -11,14 +11,12 @@
       rel="stylesheet"
     />
 
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"
-    ></script>
-    <script defer type="text/javascript" src="./nutrients.js"></script>
-    <script defer type="text/javascript" src="./settings.js"></script>
-    <script defer type="text/javascript" src="./foodLog.js"></script>
-    <script defer type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript" src="moment.js"></script>
+    <script type="text/javascript" src="idbkeyval.js"></script>
+    <script defer type="text/javascript" src="nutrients.js"></script>
+    <script defer type="text/javascript" src="settings.js"></script>
+    <script defer type="text/javascript" src="foodLog.js"></script>
+    <script defer type="text/javascript" src="index.js"></script>
   </head>
   <body>
     <datalist id="nutrients"></datalist>
@@ -126,10 +124,7 @@
             style="filter: brightness(0)"
           />
         </button>
-        <div>log food</div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div id="food-log-wrapper"></div>
       </div>
     </div>
   </body>

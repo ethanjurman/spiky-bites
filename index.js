@@ -28,6 +28,9 @@ function showPage(page) {
     entry.style.display = 'none';
   });
   document.getElementById(`${page}-screen`).style.display = '';
+  if (page === 'food-log') {
+    loadFoodLogs();
+  }
 }
 
 function updateGoalTracker() {
@@ -90,7 +93,8 @@ function updateSelectableFoodItems(foodItems, start) {
 
 let currentFoodItem = null;
 
-function loadFood(foodItem, amount = 100) {
+function loadFood(foodItem, amount = 100, editItem = 0) {
+  isEditingFoodItem = editItem !== 0;
   currentFoodItem = foodItem;
   document.getElementById('food-edit-name').value = foodItem.description;
   const nutritionSection = document.getElementById('nutrition-edit');
@@ -98,6 +102,7 @@ function loadFood(foodItem, amount = 100) {
   foodItem.foodNutrients.forEach(nutrient => {
     const nutrientItem = document.createElement('div');
     const nutrientTypeInput = document.createElement('input');
+    nutrientTypeInput.classList.add('nutirion-type-edit');
     nutrientTypeInput.setAttribute('list', 'nutrients');
     nutrientTypeInput.setAttribute('placeholder', 'type');
     nutrientTypeInput.setAttribute('value', nutrient.nutrientName);
@@ -110,15 +115,20 @@ function loadFood(foodItem, amount = 100) {
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);
     nutritionSection.appendChild(nutrientItem);
-  })
+  });
 
-  const nutrientAddButton = document.createElement('button');
-  nutrientAddButton.innerText = "Add Nutrient";
-  nutrientAddButton.onclick = () => {
+  const addNutritionField = () => {
     const nutrientItem = document.createElement('div');
     const nutrientTypeInput = document.createElement('input');
+    nutrientTypeInput.classList.add('nutirion-type-edit');
     nutrientTypeInput.setAttribute('list', 'nutrients');
     nutrientTypeInput.setAttribute('placeholder', 'type');
+    nutrientTypeInput.onchange = () => {
+      const items = document.querySelectorAll('.nutirion-type-edit')
+      if (items[items.length - 1].value) {
+        addNutritionField();
+      }
+    }
 
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
@@ -128,7 +138,7 @@ function loadFood(foodItem, amount = 100) {
     nutrientItem.appendChild(nutrientAmountInput);
     nutritionSection.appendChild(nutrientItem);
   }
-  nutritionSection.appendChild(nutrientAddButton);
+  addNutritionField();
 }
 
 function updateFoodValuesFromAmount() {

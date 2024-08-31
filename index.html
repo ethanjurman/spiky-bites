@@ -3,55 +3,134 @@
     <title>Spiky Bites</title>
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"
     ></script>
     <script defer type="text/javascript" src="./nutrients.js"></script>
     <script defer type="text/javascript" src="./settings.js"></script>
+    <script defer type="text/javascript" src="./foodLog.js"></script>
     <script defer type="text/javascript" src="./index.js"></script>
   </head>
   <body>
     <datalist id="nutrients"></datalist>
     <div id="screen">
-      <div class="grid-search-wrapper">
-        <button id="settings-button" onclick="showSettings()"></button>
-        <div id="search-wrapper">
+      <!-- food add -->
+      <div class="content-wrapper" id="food-add-screen">
+        <div class="grid-search-wrapper">
+          <button id="settings-button" onclick="showPage('food-log')">
+            <img
+              src="images/lists_icon.svg"
+              alt="food log"
+              style="filter: brightness(0)"
+            />
+          </button>
           <input
             type="text"
             id="search"
             placeholder="Food Search"
             onchange="searchFoods()"
           />
-          <input
-            id="food-amount-input"
-            type="number"
-            min="0"
-            placeholder="amount"
-            style="display: none"
-          />
+          <button id="settings-button" onclick="showPage('settings')">
+            <img
+              src="images/settings_icon.svg"
+              alt="settings"
+              style="filter: brightness(0)"
+            />
+          </button>
         </div>
-        <button id="settings-button" onclick="showSettings()">
+        <div id="grid-food-items-wrapper"></div>
+        <div id="grid-food-items-spinner" style="display: none">
+          <img src="images/progress_spinner_icon.svg" alt="progress spinner" />
+        </div>
+        <div id="goal-tracker"></div>
+      </div>
+
+      <!-- settings -->
+      <div class="content-wrapper" id="settings-screen" style="display: none">
+        <button id="settings-button" onclick="showPage('food-add')">
           <img
-            src="images/settings_icon.svg"
-            alt="settings"
+            src="images/arrow_back_icon.svg"
+            alt="previous page"
             style="filter: brightness(0)"
           />
         </button>
+        <div>
+          <label for="api">USDA API KEY:</label>
+          <input
+            type="text"
+            id="api-key-input"
+            name="api"
+            onchange="saveApiKey()"
+          />
+          <div id="goals-settings-container"></div>
+          <button id="goal-add-button" onclick="addGoal()">+</button>
+        </div>
+        <div style="height: 100%"></div>
       </div>
-      <div id="grid-food-items-wrapper"></div>
-      <div id="goal-tracker"></div>
-    </div>
-    <div id="settings" style="display: none">
-      <label for="api">USDA API KEY:</label>
-      <input
-        type="text"
-        id="api-key-input"
-        name="api"
-        onchange="saveApiKey()"
-      />
-      <div id="goals-settings-container"></div>
-      <button id="goal-add-button" onclick="addGoal()">+</button>
+
+      <!-- edit food entry -->
+      <div class="content-wrapper" id="food-edit-screen" style="display: none">
+        <div class="grid-search-wrapper">
+          <button id="settings-button" onclick="showPage('food-add')">
+            <img
+              src="images/arrow_back_icon.svg"
+              alt="previous page"
+              style="filter: brightness(0)"
+            />
+          </button>
+          <input type="text" id="food-edit-name" placeholder="Food Item" />
+        </div>
+        <input
+          type="number"
+          id="food-edit-amount"
+          placeholder="Amount"
+          value="100"
+          onchange="updateFoodValuesFromAmount()"
+        />
+        <div id="nutrition-edit"></div>
+        <div>
+          <div class="button-row">
+            <button id="remove-button" onclick="removeFoodItem()">
+              Remove
+            </button>
+            <button id="save-new-button" onclick="saveDuplicateFoodItem()">
+              Save New
+            </button>
+          </div>
+          <div class="button-row">
+            <button id="cancel-button" onclick="cancelFoodItem()">
+              Cancel
+            </button>
+            <button id="save-button" onclick="saveCurrentFoodItem()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- food log -->
+      <div class="content-wrapper" id="food-log-screen" style="display: none">
+        <button id="settings-button" onclick="showPage('food-add')">
+          <img
+            src="images/arrow_back_icon.svg"
+            alt="previous page"
+            style="filter: brightness(0)"
+          />
+        </button>
+        <div>log food</div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </body>
 </html>

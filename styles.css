@@ -4,6 +4,9 @@ html {
 
 html > * {
   color: #000000;
+  font-family: "Righteous";
+  font-weight: 400;
+  font-style: normal;
 }
 
 #screen {
@@ -13,27 +16,26 @@ html > * {
   border: 3px solid #000000;
   border-width: 3px 8px 8px 3px;
   height: calc(100% - 45px);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   padding: 10px;
-  justify-content: space-between;
 }
 
-#search-wrapper {
+.content-wrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  justify-content: space-between;
+  height: 100%;
 }
 
 #search {
   border-radius: 20px;
   text-align: center;
   border: 3px solid #000000;
-  border-width: 2px 5px 5px 2px;
+  border-width: 3px 8px 8px 3px;
   font-size: 24px;
   font-weight: bolder;
   min-height: 50px;
+  width: 100%;
   /* search icon */
   background-image: url(images/search_icon_dark.svg);
   background-repeat: no-repeat;
@@ -43,15 +45,13 @@ html > * {
   padding-right: 50px;
 }
 
-#food-amount-input {
+#food-edit-name {
   border-radius: 20px;
   text-align: center;
-  border: 3px solid #000000;
-  border-width: 2px 5px 5px 2px;
   font-size: 24px;
   font-weight: bolder;
-  max-width: 50%;
-  align-self: center;
+  min-height: 50px;
+  width: 100%;
 }
 
 #settings-button {
@@ -59,9 +59,11 @@ html > * {
   height: 50px;
   width: 50px;
   background: white;
-  border: 3px solid #000000;
-  border-width: 2px 5px 5px 2px;
   cursor: pointer;
+}
+
+#settings-screen {
+  text-align: center;
 }
 
 .grid-search-wrapper {
@@ -74,26 +76,13 @@ html > * {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr 1fr 1fr;
+  height: 100%;
+  overflow: auto;
 }
 
 .grid-log-item-wrapper {
   display: grid;
   gap: 10px;
-}
-
-#settings {
-  position: absolute;
-  left: 20px;
-  width: calc(100% - 40px);
-  top: 80px;
-  height: calc(100% - 200px);
-  background: #40798c;
-  border: 3px solid #000000;
-  border-width: 2px 5px 5px 2px;
-  border-radius: 30px;
-  text-align: center;
-  padding: 20px 0px;
-  color: white;
 }
 
 #api-key-input {
@@ -105,8 +94,84 @@ html > * {
   border-radius: 30px;
   border: 3px solid #000000;
   border-width: 3px 8px 8px 3px;
-  height: 100px;
+  height: 100%;
   cursor: pointer;
+  transition: all 0.1s;
+}
+.food-button:hover {
+  border-width: 8px 3px 3px 8px;
+  box-shadow: inset #08080075 5px 5px 0px;
+}
+.food-button:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.food-button:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.food-button:nth-child(3) {
+  animation-delay: 0.06s;
+}
+.food-button:nth-child(4) {
+  animation-delay: 0.08s;
+}
+.food-button:nth-child(5) {
+  animation-delay: 0.1s;
+}
+.food-button:nth-child(6) {
+  animation-delay: 0.12s;
+}
+.food-button:nth-child(7) {
+  animation-delay: 0.14s;
+}
+.food-button:nth-child(8) {
+  animation-delay: 0.16s;
+}
+.food-button:nth-child(9) {
+  animation-delay: 0.18s;
+}
+.food-button:nth-child(10) {
+  animation-delay: 0.2s;
+}
+.food-button:nth-child(11) {
+  animation-delay: 0.22s;
+}
+.food-button:nth-child(12) {
+  animation-delay: 0.24s;
+}
+.food-button:nth-child(13) {
+  animation-delay: 0.26s;
+}
+.food-button:nth-child(14) {
+  animation-delay: 0.28s;
+}
+.food-button:nth-child(15) {
+  animation-delay: 0.3s;
+}
+
+button {
+  border-radius: 30px;
+  border: 3px solid #000000;
+  border-width: 3px 8px 8px 3px;
+  cursor: pointer;
+  font-family: "Righteous";
+  transition: all 0.05s;
+
+  /* used for the trash goal button, but shouldn't impact other buttons */
+  min-height: 48px;
+  min-width: 48px;
+}
+button:hover {
+  border-width: 8px 3px 3px 8px;
+  box-shadow: inset #08080075 5px 5px 0px;
+}
+
+input {
+  font-family: "Righteous";
+  border: 3px solid #000000;
+  border-width: 3px 8px 8px 3px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
 }
 
 .goal-input-wrapper {
@@ -125,33 +190,119 @@ html > * {
   width: 100%;
   border: 3px solid #000000;
   border-radius: 8px;
+  height: 100%;
 }
 
 #goal-add-button {
   width: calc(100% - 140px);
   border: 3px solid #000000;
   border-radius: 8px;
-  border-width: 2px 5px 5px 2px;
   cursor: pointer;
+  font-size: larger;
 }
 #goal-tracker {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  margin-right: 10px;
 }
 .goal-tracker-item {
   height: 20px;
   width: 100%;
   border: 3px solid #000000;
   border-radius: 8px;
-  border-width: 2px 5px 5px 2px;
+  border-width: 3px 8px 8px 3px;
 }
 .goal-tracker-fill {
-  height: 20px;
+  height: 12px;
   border-radius: 8px;
+  margin-top: 4px;
+  margin-left: 4px;
 }
 .goal-tracker-target {
   position: relative;
   height: 20px;
-  top: -20px;
+  top: -16px;
+}
+
+#cancel-button,
+#save-button,
+#remove-button,
+#save-new-button {
+  border-radius: 15px;
+  min-height: 60px;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+.button-row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}
+
+#cancel-button {
+  background-color: #c2c2c2;
+}
+
+#save-button {
+  background-color: #85ffff;
+}
+
+#remove-button {
+  background-color: #ff8686;
+}
+
+#save-new-button {
+  background-color: #85afff;
+}
+
+#nutrition-edit {
+  text-align: center;
+  overflow-y: auto;
+}
+
+#nutrition-edit > div {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 10px;
+  margin: 0px 20px;
+}
+
+#nutrition-edit > div > input {
+  width: 100%;
+}
+#grid-food-items-spinner {
+  overflow: hidden;
+}
+#grid-food-items-spinner > img {
+  width: 100%;
+  max-height: 100%;
+  animation-name: spin;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes pop-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+* {
+  animation-name: pop-in;
+  animation-fill-mode: both;
+  animation-duration: 0.1s;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

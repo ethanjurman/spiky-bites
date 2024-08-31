@@ -21,10 +21,23 @@ async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
 
     const logSection = document.createElement('div');
     logSection.onclick = () => { /* reveal more log items, then remove onclick */ }
-    const dateLabel = document.createElement('div');
+    const dateLabel = document.createElement('button');
+    dateLabel.classList.add('date-label');
+    dateLabel.onclick = () => {
+      const itemsWrapper = document.getElementById(`items-${moment(date).format('MMDDYYYY')}`);
+      if (itemsWrapper.classList.contains('flex-items')) {
+        itemsWrapper.classList.remove('flex-items')
+        itemsWrapper.classList.add('grid-items')
+      } else {
+        itemsWrapper.classList.remove('grid-items')
+        itemsWrapper.classList.add('flex-items')
+      }
+    }
     dateLabel.innerText = moment(date).format('MMM Do');
     const logItemsWrapper = document.createElement('div');
+    logItemsWrapper.setAttribute('id', `items-${moment(date).format('MMDDYYYY')}`)
     logItemsWrapper.classList.add('food-log-items-wrapper')
+    logItemsWrapper.classList.add('flex-items')
     foodItems.forEach(foodItem => {
       const item = {
         description: foodItem.name,

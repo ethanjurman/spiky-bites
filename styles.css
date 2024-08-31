@@ -3,27 +3,55 @@ html {
 }
 
 html > * {
-  color: #2c363f;
+  color: #000000;
 }
 
 #screen {
   max-width: 600px;
   margin: 10px auto;
   border-radius: 30px;
-  border: 3px solid #2c363f;
+  border: 3px solid #000000;
   border-width: 3px 8px 8px 3px;
-  height: calc(100% - 20px);
+  height: calc(100% - 45px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+#search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 #search {
   border-radius: 20px;
   text-align: center;
-  border: 3px solid #2c363f;
+  border: 3px solid #000000;
   border-width: 2px 5px 5px 2px;
-  margin: 10px;
-  grid-column: 1 / 12;
   font-size: 24px;
   font-weight: bolder;
+  min-height: 50px;
+  /* search icon */
+  background-image: url(images/search_icon_dark.svg);
+  background-repeat: no-repeat;
+  background-position: 15px 50%;
+  background-size: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+#food-amount-input {
+  border-radius: 20px;
+  text-align: center;
+  border: 3px solid #000000;
+  border-width: 2px 5px 5px 2px;
+  font-size: 24px;
+  font-weight: bolder;
+  max-width: 50%;
+  align-self: center;
 }
 
 #settings-button {
@@ -31,15 +59,99 @@ html > * {
   height: 50px;
   width: 50px;
   background: white;
-  border: 3px solid #2c363f;
+  border: 3px solid #000000;
   border-width: 2px 5px 5px 2px;
-  margin: 10px 10px 0px -10px;
   cursor: pointer;
 }
 
-.grid-wrapper {
+.grid-search-wrapper {
   display: grid;
   gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: auto 1fr auto;
+}
+
+#grid-food-items-wrapper {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-log-item-wrapper {
+  display: grid;
+  gap: 10px;
+}
+
+#settings {
+  position: absolute;
+  left: 20px;
+  width: calc(100% - 40px);
+  top: 80px;
+  height: calc(100% - 200px);
+  background: #40798c;
+  border: 3px solid #000000;
+  border-width: 2px 5px 5px 2px;
+  border-radius: 30px;
+  text-align: center;
+  padding: 20px 0px;
+  color: white;
+}
+
+#api-key-input {
+  border-radius: 20px;
+  padding: 4px 8px;
+}
+
+.food-button {
+  border-radius: 30px;
+  border: 3px solid #000000;
+  border-width: 3px 8px 8px 3px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.goal-input-wrapper {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 3fr 2fr 2fr 2fr 0.5fr;
+}
+
+#goals-settings-container {
+  display: grid;
+  gap: 5px;
+  padding: 5px;
+}
+
+.goal-input-wrapper > input {
+  width: 100%;
+  border: 3px solid #000000;
+  border-radius: 8px;
+}
+
+#goal-add-button {
+  width: calc(100% - 140px);
+  border: 3px solid #000000;
+  border-radius: 8px;
+  border-width: 2px 5px 5px 2px;
+  cursor: pointer;
+}
+#goal-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.goal-tracker-item {
+  height: 20px;
+  width: 100%;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  border-width: 2px 5px 5px 2px;
+}
+.goal-tracker-fill {
+  height: 20px;
+  border-radius: 8px;
+}
+.goal-tracker-target {
+  position: relative;
+  height: 20px;
+  top: -20px;
 }

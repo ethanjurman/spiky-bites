@@ -3,18 +3,55 @@
     <title>Spiky Bites</title>
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript" src="./index.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/idb-keyval@6/dist/umd.js"
+    ></script>
+    <script defer type="text/javascript" src="./nutrients.js"></script>
+    <script defer type="text/javascript" src="./settings.js"></script>
+    <script defer type="text/javascript" src="./index.js"></script>
   </head>
   <body>
+    <datalist id="nutrients"></datalist>
     <div id="screen">
-      <div class="grid-wrapper">
-        <input type="text" id="search" />
-        <button id="settings-button"></button>
+      <div class="grid-search-wrapper">
+        <button id="settings-button" onclick="showSettings()"></button>
+        <div id="search-wrapper">
+          <input
+            type="text"
+            id="search"
+            placeholder="Food Search"
+            onchange="searchFoods()"
+          />
+          <input
+            id="food-amount-input"
+            type="number"
+            min="0"
+            placeholder="amount"
+            style="display: none"
+          />
+        </div>
+        <button id="settings-button" onclick="showSettings()">
+          <img
+            src="images/settings_icon.svg"
+            alt="settings"
+            style="filter: brightness(0)"
+          />
+        </button>
       </div>
+      <div id="grid-food-items-wrapper"></div>
+      <div id="goal-tracker"></div>
     </div>
-    <div id="settings">
+    <div id="settings" style="display: none">
       <label for="api">USDA API KEY:</label>
-      <input type="text" id="api" name="api" />
+      <input
+        type="text"
+        id="api-key-input"
+        name="api"
+        onchange="saveApiKey()"
+      />
+      <div id="goals-settings-container"></div>
+      <button id="goal-add-button" onclick="addGoal()">+</button>
     </div>
   </body>
 </html>

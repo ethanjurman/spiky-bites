@@ -148,7 +148,8 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     // edit food amount options
     const foodAmountOptionsElement = document.getElementById('food-edit-amount-options')
     foodAmountOptionsElement.innerHTML = '';
-    if (foodItem.foodMeasures) {
+    const hasFoodMeasureItems = foodItem.foodMeasures && foodItem.foodMeasures.length > 0;
+    if (hasFoodMeasureItems) {
       foodItem.foodMeasures.forEach(measure => {
         const unknownOption = measure.disseminationText == 'Quantity not specified';
         if (unknownOption && foodItem.foodMeasures.filter(m => m.gramWeight === measure.gramWeight).length > 1) {
@@ -176,7 +177,7 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
 
       foodAmountOptionsElement.appendChild(amountOptionButton);
     }
-    if (!foodItem.foodMeasures && !foodItem.servingSize) {
+    if (!hasFoodMeasureItems && !foodItem.servingSize) {
       document.getElementById('serving-size-wrapper').style.display = 'none'
     } else {
       document.getElementById('serving-size-wrapper').style.display = ''

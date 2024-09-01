@@ -123,6 +123,7 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
   }
   document.getElementById('food-edit-amount').value = amount;
   document.getElementById('food-edit-name').value = foodItem.description;
+  document.getElementById('food-edit-name').onchange = (e) => currentFoodItem.description = e.target.value;
   const nutritionSection = document.getElementById('nutrition-edit');
   nutritionSection.innerHTML = '';
   foodItem.foodNutrients.forEach(nutrient => {

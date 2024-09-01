@@ -186,6 +186,30 @@ html > * {
 .food-button:nth-child(15) {
   animation-delay: 0.3s;
 }
+.food-button:nth-child(16) {
+  animation-delay: 0.32s;
+}
+.food-button:nth-child(17) {
+  animation-delay: 0.34s;
+}
+.food-button:nth-child(18) {
+  animation-delay: 0.36s;
+}
+.food-button:nth-child(19) {
+  animation-delay: 0.38s;
+}
+.food-button:nth-child(20) {
+  animation-delay: 0.4s;
+}
+.food-button:nth-child(21) {
+  animation-delay: 0.42s;
+}
+
+.flex-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 button {
   border-radius: 30px;
@@ -375,6 +399,16 @@ input {
   text-align: right;
   transform: translate(-32px, -32px) !important;
   pointer-events: none;
+}
+
+#food-edit-amount-options {
+  display: flex;
+  gap: 10px;
+  height: 50px;
+}
+
+#food-edit-amount-options > button {
+  padding: 10px;
 }
 
 @keyframes pop-in {

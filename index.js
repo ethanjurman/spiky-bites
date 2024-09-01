@@ -72,7 +72,7 @@ function updateGoalTracker() {
 
 function updateSelectableFoodItems(foodItems, start) {
   const itemWrapper = document.getElementById('grid-food-items-wrapper');
-  const PAGE_SIZE = (Math.floor(itemWrapper.clientHeight / (110)) * 3) - 1;
+  const PAGE_SIZE = Math.min((Math.floor(itemWrapper.clientHeight / (110)) * 3) - 1, 20);
   itemWrapper.innerHTML = "";
   const hasMore = foodItems.length > start + PAGE_SIZE;
   const end = (hasMore ? start + (PAGE_SIZE - 1) : start + PAGE_SIZE) + (start === 0 ? 1 : 0);
@@ -144,6 +144,43 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);
     nutritionSection.appendChild(nutrientItem);
+
+    // edit food amount options
+    const foodAmountOptionsElement = document.getElementById('food-edit-amount-options')
+    foodAmountOptionsElement.innerHTML = '';
+    if (foodItem.foodMeasures) {
+      foodItem.foodMeasures.forEach(measure => {
+        const unknownOption = measure.disseminationText == 'Quantity not specified';
+        if (unknownOption && foodItem.foodMeasures.filter(m => m.gramWeight === measure.gramWeight).length > 1) {
+          // this is basically a duplicate option, so we can ignore it
+          return;
+        }
+        const amountOptionButton = document.createElement('button');
+        amountOptionButton.innerText = measure.disseminationText === 'Quantity not specified' ? `${measure.gramWeight}g` : measure.disseminationText
+        amountOptionButton.onclick = () => {
+          document.getElementById('food-edit-amount').value = measure.gramWeight;
+          updateFoodValuesFromAmount(measure.gramWeight);
+        };
+
+        foodAmountOptionsElement.appendChild(amountOptionButton);
+      });
+    }
+    if (foodItem.servingSize) {
+      const amountOptionButton = document.createElement('button');
+      const servingSize = foodItem.servingSize.toFixed(2);
+      amountOptionButton.innerText = foodItem.householdServingFullText ? foodItem.householdServingFullText : `${servingSize} (${foodItem.servingSizeUnit})`
+      amountOptionButton.onclick = () => {
+        document.getElementById('food-edit-amount').value = servingSize;
+        updateFoodValuesFromAmount(servingSize);
+      };
+
+      foodAmountOptionsElement.appendChild(amountOptionButton);
+    }
+    if (!foodItem.foodMeasures && !foodItem.servingSize) {
+      document.getElementById('serving-size-wrapper').style.display = 'none'
+    } else {
+      document.getElementById('serving-size-wrapper').style.display = ''
+    }
   });
 
   const addNutritionField = () => {

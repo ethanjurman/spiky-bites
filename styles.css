@@ -404,11 +404,13 @@ input {
 #food-edit-amount-options {
   display: flex;
   gap: 10px;
-  height: 50px;
+  min-height: 50px;
+  overflow-x: auto;
 }
 
 #food-edit-amount-options > button {
   padding: 10px;
+  min-width: 100px;
 }
 
 @keyframes pop-in {

@@ -193,13 +193,16 @@
           </button>
           <input type="text" id="food-edit-name" placeholder="Food Item" />
         </div>
-        <input
-          type="number"
-          id="food-edit-amount"
-          placeholder="Amount"
-          value="100"
-          onchange="updateFoodValuesFromAmount()"
-        />
+        <div id="food-edit-amount-wrapper">
+          <input
+            type="number"
+            id="food-edit-amount"
+            placeholder="Amount"
+            value="100"
+            onchange="updateFoodValuesFromAmount()"
+          />
+          <div id="unit">g</div>
+        </div>
         <div id="nutrition-edit"></div>
         <div>
           <div class="button-row" id="food-item-edit-button-row">

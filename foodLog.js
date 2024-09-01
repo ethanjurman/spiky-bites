@@ -7,6 +7,20 @@ function addFoodLogItem(item) {
   idbKeyval.update(`logs-${timeLogEntry}`, (logs) => [item].concat(logs || []));
 }
 
+function updateFoodLogItem(item) {
+  const timeLogEntry = moment(item.time).format('MMDDYYYY');
+  idbKeyval.update(`logs-${timeLogEntry}`, (logs) => logs.map(log =>
+    log.time.toString() == item.time.toString() ? item : log
+  ));
+}
+
+function removeFoodLogItem(item) {
+  const timeLogEntry = moment(item.time).format('MMDDYYYY');
+  idbKeyval.update(`logs-${timeLogEntry}`, (logs) => logs.filter(log =>
+    log.time.toString() != item.time.toString()
+  ))
+}
+
 async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
   const logWrapperElement = document.getElementById('food-log-wrapper');
   logWrapperElement.innerHTML = '';
@@ -20,7 +34,6 @@ async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
     }
 
     const logSection = document.createElement('div');
-    logSection.onclick = () => { /* reveal more log items, then remove onclick */ }
     const dateLabel = document.createElement('button');
     dateLabel.classList.add('date-label');
     dateLabel.onclick = () => {
@@ -41,7 +54,9 @@ async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
     foodItems.forEach(foodItem => {
       const item = {
         description: foodItem.name,
-        foodNutrients: foodItem.nutrients.map(n => ({ nutrientName: n.name, value: n.value }))
+        foodNutrients: foodItem.nutrients.map(n => ({ nutrientName: n.name, value: n.value })),
+        amount: foodItem.amount,
+        time: foodItem.time
       }
       const itemElement = document.createElement('button');
       itemElement.classList.add('food-button');
@@ -53,7 +68,7 @@ async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
     const nutritionSummary = document.createElement('div');
     const goals = await idbKeyval.get('goals');
     goals.forEach(goal => {
-      const nutritionSum = foodItems.reduce((sum, item) => sum + Number(item.nutrients.find(n => n.name === goal.type).value) || 0, 0)
+      const nutritionSum = foodItems.reduce((sum, item) => sum + Number((item.nutrients.find(n => n.name === goal.type) || {}).value) || 0, 0)
       nutritionSummary.innerHTML = nutritionSummary.innerHTML + `<div>${goal.type}: ${nutritionSum.toFixed(2)}</div>`
     })
 

@@ -18,23 +18,10 @@ function renderGoalSettings() {
       const goalType = document.createElement("input");
       goalType.setAttribute('list', 'nutrients');
       goalType.value = goalData.type;
-      goalType.placeholder = "Type"
-      goalType.onchange = (e) => updateGoalItem(index, 'type', e.target.value)
-      const goalMin = document.createElement("input");
-      goalMin.type = "number";
-      goalMin.value = goalData.min;
-      goalMin.placeholder = "Min"
-      goalMin.onchange = (e) => updateGoalItem(index, 'min', e.target.value)
-      const goalMax = document.createElement("input");
-      goalMax.type = "number";
-      goalMax.value = goalData.max;
-      goalMax.placeholder = "Max"
-      goalMax.onchange = (e) => updateGoalItem(index, 'max', e.target.value)
-      const goalColor = document.createElement("input");
-      goalColor.type = "color";
-      goalColor.value = goalData.color;
-      goalColor.onchange = (e) => updateGoalItem(index, 'color', e.target.value);
+      goalType.placeholder = "Type";
+      goalType.onchange = (e) => updateGoalItem(index, 'type', e.target.value);
       const goalRemove = document.createElement("button");
+      goalRemove.classList.add("danger");
       goalRemove.onclick = () => removeGoal(index);
       goalRemove.innerHTML = `<img
     src="images/trash_icon.svg"
@@ -43,9 +30,6 @@ function renderGoalSettings() {
     />`
 
       goal.appendChild(goalType);
-      goal.appendChild(goalMin);
-      goal.appendChild(goalMax);
-      goal.appendChild(goalColor);
       goal.appendChild(goalRemove);
       goalsContainer.appendChild(goal);
     })

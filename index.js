@@ -31,6 +31,9 @@ function showPage(page) {
   if (page === 'food-log') {
     loadFoodLogs();
   }
+  if (page !== 'food-edit') {
+    currentFoodItem = {};
+  }
 }
 
 function updateGoalTracker() {
@@ -91,11 +94,21 @@ function updateSelectableFoodItems(foodItems, start) {
   }
 }
 
-let currentFoodItem = null;
+let currentFoodItem = {};
 
 function loadFood(foodItem, amount = 100, editItem = 0) {
   isEditingFoodItem = editItem !== 0;
   currentFoodItem = foodItem;
+  if (isEditingFoodItem) {
+    document.getElementById('food-item-edit-button-row').style.display = '';
+    document.getElementById('food-item-save-button-row').style.display = 'none';
+    document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-log')
+  } else {
+    document.getElementById('food-item-save-button-row').style.display = '';
+    document.getElementById('food-item-edit-button-row').style.display = 'none';
+    document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-add')
+  }
+  document.getElementById('food-edit-amount').value = amount;
   document.getElementById('food-edit-name').value = foodItem.description;
   const nutritionSection = document.getElementById('nutrition-edit');
   nutritionSection.innerHTML = '';
@@ -110,7 +123,7 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'amount');
-    nutrientAmountInput.setAttribute('value', (nutrient.value * (amount / 100)).toFixed(2));
+    nutrientAmountInput.setAttribute('value', isEditingFoodItem ? nutrient.value : (nutrient.value * (amount / 100)).toFixed(2));
 
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);
@@ -142,34 +155,37 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
 }
 
 function updateFoodValuesFromAmount() {
-  const newAmount = document.getElementById('food-edit-amount').value
-  loadFood(currentFoodItem, newAmount);
+  const newAmount = parseFloat(document.getElementById('food-edit-amount').value);
+  loadFood(currentFoodItem, newAmount, currentFoodItem.time);
 }
 
 function removeFoodItem() {
-  currentFoodItem = null;
-  showPage('food-add');
+  removeFoodLogItem(currentFoodItem);
+  showPage('food-log');
 }
 
 function saveDuplicateFoodItem() {
-  currentFoodItem = null;
-  showPage('food-add');
+  saveCurrentFoodItem(new Date());
+  showPage('food-log');
 }
 
-function cancelFoodItem() {
-  currentFoodItem = null;
-  showPage('food-add');
-}
-
-function saveCurrentFoodItem() {
-  const foodItemName = document.getElementById('food-edit-name').value
-  const foodItemAmount = document.getElementById('food-edit-amount').value
+function saveCurrentFoodItem(isNew = true) {
+  const foodItemName = document.getElementById('food-edit-name').value;
+  const foodItemAmount = document.getElementById('food-edit-amount').value;
   const nutrients = [...document.getElementById('nutrition-edit').children]
     .filter(element => element.children.length === 2 && element.children[0].value)
-    .map(element => { return { name: element.children[0].value, value: element.children[1].value } })
-  addFoodLogItem({ name: foodItemName, amount: foodItemAmount, nutrients, time: new Date() })
-  currentFoodItem = null;
-  showPage('food-add');
+    .map(element => { return { name: element.children[0].value, value: element.children[1].value } });
+
+  if (isNew) {
+    addFoodLogItem({ name: foodItemName, amount: foodItemAmount, nutrients, time: new Date() });
+    currentFoodItem = {};
+    showPage('food-add');
+  } else {
+    updateFoodLogItem({ name: foodItemName, amount: foodItemAmount, nutrients, time: currentFoodItem.time });
+    currentFoodItem = {};
+    showPage('food-log');
+  }
+
 }
 
 updateGoalTracker();

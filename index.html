@@ -24,7 +24,7 @@
       <!-- food add -->
       <div class="content-wrapper" id="food-add-screen">
         <div class="grid-search-wrapper">
-          <button id="settings-button" onclick="showPage('food-log')">
+          <button class="page-button" onclick="showPage('food-log')">
             <img
               src="images/lists_icon.svg"
               alt="food log"
@@ -37,7 +37,7 @@
             placeholder="Food Search"
             onchange="searchFoods()"
           />
-          <button id="settings-button" onclick="showPage('settings')">
+          <button class="page-button" onclick="showPage('settings')">
             <img
               src="images/settings_icon.svg"
               alt="settings"
@@ -54,7 +54,7 @@
 
       <!-- settings -->
       <div class="content-wrapper" id="settings-screen" style="display: none">
-        <button id="settings-button" onclick="showPage('food-add')">
+        <button class="page-button" onclick="showPage('food-add')">
           <img
             src="images/arrow_back_icon.svg"
             alt="previous page"
@@ -78,7 +78,7 @@
       <!-- edit food entry -->
       <div class="content-wrapper" id="food-edit-screen" style="display: none">
         <div class="grid-search-wrapper">
-          <button id="settings-button" onclick="showPage('food-add')">
+          <button class="page-button" onclick="showPage('food-add')">
             <img
               src="images/arrow_back_icon.svg"
               alt="previous page"
@@ -96,18 +96,22 @@
         />
         <div id="nutrition-edit"></div>
         <div>
-          <div class="button-row">
-            <button id="remove-button" onclick="removeFoodItem()">
+          <div class="button-row" id="food-item-edit-button-row">
+            <button
+              id="remove-button"
+              class="danger"
+              onclick="removeFoodItem()"
+            >
               Remove
             </button>
             <button id="save-new-button" onclick="saveDuplicateFoodItem()">
               Save New
             </button>
-          </div>
-          <div class="button-row">
-            <button id="cancel-button" onclick="cancelFoodItem()">
-              Cancel
+            <button id="save-button" onclick="saveCurrentFoodItem(false)">
+              Update
             </button>
+          </div>
+          <div class="button-row" id="food-item-save-button-row">
             <button id="save-button" onclick="saveCurrentFoodItem()">
               Save
             </button>
@@ -117,7 +121,7 @@
 
       <!-- food log -->
       <div class="content-wrapper" id="food-log-screen" style="display: none">
-        <button id="settings-button" onclick="showPage('food-add')">
+        <button class="page-button" onclick="showPage('food-add')">
           <img
             src="images/arrow_back_icon.svg"
             alt="previous page"

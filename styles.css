@@ -54,7 +54,7 @@ html > * {
   width: 100%;
 }
 
-#settings-button {
+.page-button {
   border-radius: 100%;
   height: 50px;
   width: 50px;
@@ -78,22 +78,18 @@ html > * {
   display: flex;
   gap: 10px;
   overflow: auto;
+  margin-bottom: 4px;
 }
 .food-log-items-wrapper.grid-items {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   overflow: auto;
+  margin-bottom: 4px;
 }
 
 .food-log-items-wrapper.flex-items > .food-button {
   width: 150px;
-  min-height: 100px;
-  height: 100%;
-  min-width: 120px;
-}
-
-.food-log-items-wrapper.grid-items > .food-button {
   min-height: 100px;
   height: 100%;
   min-width: 120px;
@@ -207,6 +203,9 @@ button:hover {
   border-width: 8px 3px 3px 8px;
   box-shadow: inset #08080075 5px 5px 0px;
 }
+button.danger {
+  background-color: #ff8686;
+}
 
 input {
   font-family: "Righteous";
@@ -220,7 +219,7 @@ input {
 .goal-input-wrapper {
   display: grid;
   gap: 5px;
-  grid-template-columns: 3fr 2fr 2fr 2fr 0.5fr;
+  grid-template-columns: 4fr 1fr;
 }
 
 #goals-settings-container {
@@ -277,22 +276,21 @@ input {
   margin-bottom: 5px;
   font-size: 18px;
 }
-.button-row {
+
+.button-row#food-item-edit-button-row {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-#cancel-button {
-  background-color: #c2c2c2;
+.button-row#food-item-save-button-row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
 }
 
 #save-button {
   background-color: #85ffff;
-}
-
-#remove-button {
-  background-color: #ff8686;
 }
 
 #save-new-button {

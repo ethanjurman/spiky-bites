@@ -1,3 +1,6 @@
+
+document.documentElement.className = 'theme';
+
 async function searchFoods() {
   const searchTerm = document.getElementById("search").value;
   if (searchTerm === '') {

@@ -1,5 +1,21 @@
 const { get, set, update } = idbKeyval;
 
+get('background-color').then(color => {
+  const value = color || '#40798c';
+  document.documentElement.style.setProperty('--color-background', value)
+  document.getElementById('background-color').value = value;
+});
+get('button-color').then(color => {
+  const value = color || '#ffffff';
+  document.documentElement.style.setProperty('--color-button', value)
+  document.getElementById('button-color').value = value;
+});
+get('text-color').then(color => {
+  const value = color || '#000000';
+  document.documentElement.style.setProperty('--color-text', value)
+  document.getElementById('text-color').value = value;
+});
+
 function saveApiKey() {
   set('api-key', document.getElementById("api-key-input").value);
   document.getElementById('search').value = '';
@@ -62,4 +78,20 @@ function removeGoal(index) {
   update("goals", (goals) => (goals || []).filter((_, goalIndex) => goalIndex === index ? false : true));
   updateGoalTracker();
   renderGoalSettings();
+}
+
+function resetColors() {
+  document.getElementById(`background-color`).value = '#40798c'
+  document.getElementById(`button-color`).value = '#ffffff'
+  document.getElementById(`text-color`).value = '#000000'
+
+  updateColor('background', '#40798c')
+  updateColor('button', '#ffffff');
+  updateColor('text', '#000000');
+}
+
+function updateColor(key) {
+  const newValue = document.getElementById(`${key}-color`).value;
+  set(`${key}-color`, document.getElementById(`${key}-color`).value)
+  document.documentElement.style.setProperty(`--color-${key}`, newValue);
 }

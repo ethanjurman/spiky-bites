@@ -132,6 +132,27 @@
           <a href="https://fdc.nal.usda.gov/api-key-signup.html"
             >Go here to request one from USDA</a
           >
+          <div id="color-setting-wrapper">
+            <div>App Colors</div>
+            <div id="color-input-wrapper">
+              <input
+                onchange="updateColor('background')"
+                type="color"
+                id="background-color"
+              />
+              <input
+                onchange="updateColor('button')"
+                type="color"
+                id="button-color"
+              />
+              <input
+                onchange="updateColor('text')"
+                type="color"
+                id="text-color"
+              />
+            </div>
+            <button onclick="resetColors()">defaults</button>
+          </div>
           <div style="margin-top: 24px; font-size: larger">
             Nutritions To Track
           </div>
@@ -141,6 +162,12 @@
 
           <div style="margin-top: 24px">
             <p>Spiky Bites is a project developed by Ethan Jurman</p>
+            <p>
+              license and code can be found here: <br />
+              <a href="https://github.com/ethanjurman/spiky-bites"
+                >https://github.com/ethanjurman/spiky-bites</a
+              >
+            </p>
             <p>
               Data submitted by users is not stored remotely or saved to a
               server, instead data is saved locally on the device using

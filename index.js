@@ -246,10 +246,12 @@ function saveCurrentFoodItem(isNew = true) {
 }
 
 function showClearDataItem() {
+  document.getElementById('clear-data-question').style.display = 'none';
   document.getElementById('clear-data-item').style.display = '';
 }
 
 function hideClearDataItem() {
+  document.getElementById('clear-data-question').style.display = '';
   document.getElementById('clear-data-item').style.display = 'none';
 }
 

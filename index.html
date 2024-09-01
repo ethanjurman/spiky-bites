@@ -135,7 +135,7 @@
           <div style="margin-top: 24px; font-size: larger">
             Nutritions To Track
           </div>
-          <div>These will hide/ show those items up in your daily logs</div>
+          <div>This will show those items up in your food logs</div>
           <div id="goals-settings-container"></div>
           <button id="goal-add-button" onclick="addGoal()">+</button>
 
@@ -156,16 +156,13 @@
               FoodData Central, 2019. fdc.nal.usda.gov.
             </div>
           </div>
-          <hr style="margin-top: 24px" />
-          <div>
+          <hr style="margin-top: 24px; margin-bottom: 24px" />
+          <div id="clear-data-question" style="margin-bottom: 12px">
             <button onclick="showClearDataItem()" class="danger">
               Clear data
             </button>
           </div>
-          <div
-            style="margin-top: 48px; margin-bottom: 48px; display: none"
-            id="clear-data-item"
-          >
+          <div style="margin-bottom: 12px; display: none" id="clear-data-item">
             <div>
               Are you absolutely sure? There won't be a way to recover your data
               afterwards

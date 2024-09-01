@@ -129,6 +129,12 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     nutrientTypeInput.setAttribute('list', 'nutrients');
     nutrientTypeInput.setAttribute('placeholder', 'type');
     nutrientTypeInput.setAttribute('value', nutrient.nutrientName);
+    nutrientTypeInput.onchange = (e) => {
+      const closerString = getClosestOption(e.target.value, nutrientsStrings);
+      if (closerString !== e.target.value) {
+        e.target.value = closerString;
+      }
+    }
 
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
@@ -146,7 +152,11 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     nutrientTypeInput.classList.add('nutirion-type-edit');
     nutrientTypeInput.setAttribute('list', 'nutrients');
     nutrientTypeInput.setAttribute('placeholder', 'type');
-    nutrientTypeInput.onchange = () => {
+    nutrientTypeInput.onchange = (e) => {
+      const closerString = getClosestOption(e.target.value, nutrientsStrings);
+      if (closerString !== e.target.value) {
+        e.target.value = closerString;
+      }
       const items = document.querySelectorAll('.nutirion-type-edit')
       if (items[items.length - 1].value) {
         addNutritionField();

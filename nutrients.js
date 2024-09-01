@@ -485,3 +485,5 @@ nutrients.forEach(item => {
   newOption.value = item.name;
   nutrientsElement.appendChild(newOption)
 })
+
+const nutrientsStrings = nutrients.map(item => item.name)

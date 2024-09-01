@@ -20,7 +20,13 @@ function renderGoalSettings() {
       goalType.setAttribute('list', 'nutrients');
       goalType.value = goalData.type;
       goalType.placeholder = "Type";
-      goalType.onchange = (e) => updateGoalItem(index, 'type', e.target.value);
+      goalType.onchange = (e) => {
+        const closerString = getClosestOption(e.target.value, nutrientsStrings);
+        if (closerString !== e.target.value) {
+          e.target.value = closerString;
+        }
+        updateGoalItem(index, 'type', e.target.value)
+      };
       const goalRemove = document.createElement("button");
       goalRemove.classList.add("danger");
       goalRemove.onclick = () => removeGoal(index);

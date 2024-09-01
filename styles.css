@@ -354,6 +354,16 @@ input {
   width: 160px;
 }
 
+#no-food-log-items {
+  overflow: hidden;
+}
+
+#food-log-top-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
 @keyframes pop-in {
   from {
     transform: scale(0);

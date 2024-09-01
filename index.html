@@ -102,6 +102,11 @@
         <div id="grid-food-items-spinner" style="display: none">
           <img src="images/progress_spinner_icon.svg" alt="progress spinner" />
         </div>
+        <div id="network-failed" style="display: none">
+          We couldn't connect to USDA. Did you provide an API key? Go to
+          settings and set that up!
+          <img src="images/spiky_bites_down.svg" alt="connection failed" />
+        </div>
         <div id="goal-tracker" style="display: none"></div>
       </div>
 
@@ -133,13 +138,33 @@
           <div id="goals-settings-container"></div>
           <button id="goal-add-button" onclick="addGoal()">+</button>
 
-          <hr style="margin-top: 48px" />
+          <div style="margin-top: 24px">
+            <p>Spiky Bites is a project developed by Ethan Jurman</p>
+            <p>
+              Data submitted by users is not stored remotely or saved to a
+              server, instead data is saved locally on the device using
+              IndexedDB. This is a personal project, and I make no guarantees
+              for long-term support.
+            </p>
+            <p>
+              Thanks to the USDA for their API! Without it, this project would
+              not have been possible. Citation for the resource here:
+            </p>
+            <div>
+              U.S. Department of Agriculture, Agricultural Research Service.
+              FoodData Central, 2019. fdc.nal.usda.gov.
+            </div>
+          </div>
+          <hr style="margin-top: 24px" />
           <div>
             <button onclick="showClearDataItem()" class="danger">
               Clear data
             </button>
           </div>
-          <div style="margin-top: 48px; display: none" id="clear-data-item">
+          <div
+            style="margin-top: 48px; margin-bottom: 48px; display: none"
+            id="clear-data-item"
+          >
             <div>
               Are you absolutely sure? There won't be a way to recover your data
               afterwards
@@ -201,14 +226,35 @@
 
       <!-- food log -->
       <div class="content-wrapper" id="food-log-screen" style="display: none">
-        <button class="page-button" onclick="showPage('food-add')">
-          <img
-            src="images/arrow_back_icon.svg"
-            alt="previous page"
-            style="filter: brightness(0)"
-          />
-        </button>
+        <div id="food-log-top-wrapper">
+          <button class="page-button" onclick="showPage('food-add')">
+            <img
+              src="images/arrow_back_icon.svg"
+              alt="previous page"
+              style="filter: brightness(0)"
+            />
+          </button>
+          <div>
+            Load from date:
+            <input
+              type="date"
+              id="food-log-date-input"
+              name="log-date"
+              onchange="updateLogDate()"
+            />
+          </div>
+        </div>
         <div id="food-log-wrapper"></div>
+        <div id="no-food-log-items" style="display: none">
+          <p>
+            This is where you'll find a list of all the food you've logged here!
+          </p>
+          <p>
+            If you haven't logged any items, then you should go back... and do
+            that!
+          </p>
+          <img src="images/spiky_bites_sad.svg" alt="sad spiky bites" />
+        </div>
       </div>
     </div>
   </body>

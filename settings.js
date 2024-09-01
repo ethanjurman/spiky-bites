@@ -1,7 +1,8 @@
 const { get, set, update } = idbKeyval;
 
 function saveApiKey() {
-  set('api-key', document.getElementById("api-key-input").value)
+  set('api-key', document.getElementById("api-key-input").value);
+  document.getElementById('search').value = '';
 }
 
 get('api-key').then((value) => {

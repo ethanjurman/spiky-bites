@@ -1,10 +1,15 @@
 async function searchFoods() {
   const searchTerm = document.getElementById("search").value;
+  if (searchTerm === '') {
+    return;
+  }
   const apiKey = document.getElementById("api-key-input").value;
   // clear items and add search spinner
   const itemWrapper = document.getElementById('grid-food-items-wrapper');
   itemWrapper.innerHTML = "";
   itemWrapper.style.display = 'none';
+  const networkFailedElement = document.getElementById('network-failed');
+  networkFailedElement.style.display = 'none';
   const spinner = document.getElementById('grid-food-items-spinner');
   spinner.style.display = '';
   try {
@@ -19,6 +24,11 @@ async function searchFoods() {
     const json = await response.json();
     updateSelectableFoodItems(json.foods, 0);
   } catch (err) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const spinner = document.getElementById('grid-food-items-spinner');
+    spinner.style.display = 'none';
+    const networkFailedElement = document.getElementById('network-failed');
+    networkFailedElement.style.display = '';
     console.error(err);
   }
 }
@@ -29,6 +39,7 @@ function showPage(page) {
   });
   document.getElementById(`${page}-screen`).style.display = '';
   if (page === 'food-log') {
+    document.getElementById('food-log-date-input').value = moment().format('YYYY-MM-DD')
     loadFoodLogs();
   }
   if (page !== 'food-edit') {

@@ -17,12 +17,17 @@ function removeFoodLogItem(item) {
   ))
 }
 
+function updateLogDate() {
+  loadFoodLogs();
+}
+
 async function loadFoodLogs(dayStart = 0, dayEnd = 7) {
   const logWrapperElement = document.getElementById('food-log-wrapper');
   logWrapperElement.innerHTML = '';
+  const dateInput = document.getElementById('food-log-date-input');
 
   for (let day = dayStart; day < dayEnd; day++) {
-    const date = moment().subtract(day, 'days');
+    const date = moment(dateInput.value).subtract(day, 'days');
     const foodItems = await loadFoodLogForDate(date);
 
     if (!foodItems || foodItems.length === 0) {
@@ -72,6 +77,13 @@ async function loadFoodLogs(dayStart = 0, dayEnd = 7) {
     logSection.appendChild(logItemsWrapper);
     logSection.appendChild(nutritionSummary);
     logWrapperElement.appendChild(logSection);
+  }
+
+  if (logWrapperElement.innerHTML === '') {
+    // no items were loaded, so we should display the no log item
+    document.getElementById('no-food-log-items').style.display = '';
+  } else {
+    document.getElementById('no-food-log-items').style.display = 'none';
   }
 }
 

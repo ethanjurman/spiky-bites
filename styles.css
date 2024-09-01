@@ -69,6 +69,9 @@ html > * {
 
 #food-log-wrapper {
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .food-log-items-wrapper.flex-items {
@@ -87,7 +90,7 @@ html > * {
 
 .food-log-items-wrapper.flex-items > .food-button {
   width: 150px;
-  min-height: 100px;
+  min-height: 60px;
   height: 100%;
   min-width: 120px;
 }

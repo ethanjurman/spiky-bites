@@ -1,7 +1,3 @@
-idbKeyval.get(`logs-${moment().format('MMDDYYYY')}`).then((foodItems) => {
-  console.log(foodItems)
-})
-
 function addFoodLogItem(item) {
   const timeLogEntry = moment(item.time).format('MMDDYYYY');
   idbKeyval.update(`logs-${timeLogEntry}`, (logs) => [item].concat(logs || []));
@@ -21,16 +17,16 @@ function removeFoodLogItem(item) {
   ))
 }
 
-async function loadFoodLogs(dayStart = 0, dayEnd = -7) {
+async function loadFoodLogs(dayStart = 0, dayEnd = 7) {
   const logWrapperElement = document.getElementById('food-log-wrapper');
   logWrapperElement.innerHTML = '';
 
-  for (let day = dayStart; day > dayEnd; day--) {
+  for (let day = dayStart; day < dayEnd; day++) {
     const date = moment().subtract(day, 'days');
     const foodItems = await loadFoodLogForDate(date);
 
     if (!foodItems || foodItems.length === 0) {
-      return;
+      continue;
     }
 
     const logSection = document.createElement('div');

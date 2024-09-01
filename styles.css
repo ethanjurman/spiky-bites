@@ -12,9 +12,6 @@ html > * {
 #screen {
   max-width: 600px;
   margin: 10px auto;
-  border-radius: 30px;
-  border: 3px solid #000000;
-  border-width: 3px 8px 8px 3px;
   height: calc(100% - 45px);
   padding: 10px;
 }
@@ -107,6 +104,9 @@ html > * {
   grid-template-columns: 1fr 1fr 1fr;
   height: 100%;
   overflow: auto;
+  /* icon */
+  background-image: url(images/spiky_bite_transparent.svg);
+  background-repeat: no-repeat;
 }
 
 .grid-log-item-wrapper {

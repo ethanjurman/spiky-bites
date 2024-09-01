@@ -65,7 +65,6 @@ function updateSelectableFoodItems(foodItems, start) {
   itemWrapper.innerHTML = "";
   const hasMore = foodItems.length > start + PAGE_SIZE;
   const end = (hasMore ? start + (PAGE_SIZE - 1) : start + PAGE_SIZE) + (start === 0 ? 1 : 0);
-  console.log({ start, end })
   if (start > 0) {
     // add food item that is a back button
     const backElement = document.createElement('button');

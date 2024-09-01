@@ -62,7 +62,7 @@ async function loadFoodLogs(dayStart = 0, dayEnd = 7) {
     });
 
     const nutritionSummary = document.createElement('div');
-    const goals = await idbKeyval.get('goals');
+    const goals = await idbKeyval.get('goals') || [];
     goals.forEach(goal => {
       const nutritionSum = foodItems.reduce((sum, item) => sum + Number((item.nutrients.find(n => n.name === goal.type) || {}).value) || 0, 0)
       nutritionSummary.innerHTML = nutritionSummary.innerHTML + `<div>${goal.type}: ${nutritionSum.toFixed(2)}</div>`

@@ -122,8 +122,35 @@
             name="api"
             onchange="saveApiKey()"
           />
+          <div>Need an API Key?</div>
+          <a href="https://fdc.nal.usda.gov/api-key-signup.html"
+            >Go here to request one from USDA</a
+          >
+          <div style="margin-top: 24px; font-size: larger">
+            Nutritions To Track
+          </div>
+          <div>These will hide/ show those items up in your daily logs</div>
           <div id="goals-settings-container"></div>
           <button id="goal-add-button" onclick="addGoal()">+</button>
+
+          <hr style="margin-top: 48px" />
+          <div>
+            <button onclick="showClearDataItem()" class="danger">
+              Clear data
+            </button>
+          </div>
+          <div style="margin-top: 48px; display: none" id="clear-data-item">
+            <div>
+              Are you absolutely sure? There won't be a way to recover your data
+              afterwards
+            </div>
+            <div id="clear-data-options-wrapper">
+              <button onclick="hideClearDataItem()">No</button>
+              <button onclick="clearAllData()" class="danger">
+                Yes, Clear my data!
+              </button>
+            </div>
+          </div>
         </div>
         <div style="height: 100%"></div>
       </div>

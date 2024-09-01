@@ -5,7 +5,7 @@ function saveApiKey() {
 }
 
 get('api-key').then((value) => {
-  document.getElementById("api-key-input").value = value;
+  document.getElementById("api-key-input").value = value || '';
 });
 
 function renderGoalSettings() {

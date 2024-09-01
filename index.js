@@ -184,7 +184,19 @@ function saveCurrentFoodItem(isNew = true) {
     currentFoodItem = {};
     showPage('food-log');
   }
+}
 
+function showClearDataItem() {
+  document.getElementById('clear-data-item').style.display = '';
+}
+
+function hideClearDataItem() {
+  document.getElementById('clear-data-item').style.display = 'none';
+}
+
+function clearAllData() {
+  idbKeyval.clear();
+  location.reload();
 }
 
 updateGoalTracker();

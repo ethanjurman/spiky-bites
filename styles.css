@@ -342,6 +342,18 @@ input {
   width: 100%;
 }
 
+#clear-data-options-wrapper {
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+#clear-data-options-wrapper > button {
+  width: 160px;
+}
+
 @keyframes pop-in {
   from {
     transform: scale(0);

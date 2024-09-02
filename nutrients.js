@@ -62,7 +62,7 @@ const nutrients = [
   { id: "1059", name: "Nitrates", unitName: "MG" },
   { id: "1060", name: "Nitrites", unitName: "MG" },
   { id: "1061", name: "Nitrosamine,total", unitName: "MG" },
-  { id: "1062", name: "Energy", unitName: "kJ" },
+  // { id: "1062", name: "Energy", unitName: "kJ" },
   { id: "1063", name: "Sugars, Total", unitName: "G", },
   { id: "1064", name: "Solids, soluble", unitName: "G" },
   { id: "1065", name: "Glycogen", unitName: "G" },
@@ -471,12 +471,14 @@ const nutrients = [
   { id: "2061", name: "Ergosta-7,22-dienol", unitName: "MG" },
   { id: "2062", name: "Ergosta-5,7-dienol", unitName: "MG" },
   { id: "2063", name: "Verbascose", unitName: "G" },
-  { id: "2064", name: "Oligosaccharides", unitName: "MG" },
+  // { id: "2064", name: "Oligosaccharides", unitName: "MG" },
   { id: "2065", name: "Low Molecular Weight Dietary Fiber (LMWDF)", unitName: "G" },
-  { id: "2068", name: "Vitamin E", unitName: "MG" },
+  // { id: "2068", name: "Vitamin E", unitName: "MG" },
   { id: "2067", name: "Vitamin A", unitName: "UG" },
   { id: "2069", name: "Glutathione", unitName: "MG" },
 ]
+
+const nutrientIdsIgnoreList = [1062, 2068, 2064]
 
 const nutrientsElement = document.getElementById("nutrients")
 nutrients.forEach(item => {

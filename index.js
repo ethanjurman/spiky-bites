@@ -127,6 +127,9 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
   const nutritionSection = document.getElementById('nutrition-edit');
   nutritionSection.innerHTML = '';
   foodItem.foodNutrients.forEach(nutrient => {
+    if (nutrientIdsIgnoreList.includes(nutrient.nutrientId)) {
+      return; // skip nutrients that we don't support
+    }
     const nutrientItem = document.createElement('div');
     const nutrientTypeInput = document.createElement('input');
     nutrientTypeInput.classList.add('nutirion-type-edit');

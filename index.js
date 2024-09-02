@@ -143,7 +143,10 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'amount');
-    nutrientAmountInput.setAttribute('value', isEditingFoodItem ? nutrient.value : (nutrient.value * (amount / 100)).toFixed(2));
+    nutrientAmountInput.setAttribute('value', isEditingFoodItem
+      ? (nutrient.value / (foodItem.amount / amount)).toFixed(2) // update the amount based on existing item
+      : (nutrient.value * (amount / 100)).toFixed(2) // update the amount based on 100 default amount
+    );
 
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);

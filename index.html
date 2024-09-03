@@ -121,13 +121,11 @@
           />
         </button>
         <div>
-          <label for="api">USDA API KEY:</label>
-          <input
-            type="text"
-            id="api-key-input"
-            name="api"
-            onchange="saveApiKey()"
-          />
+          <label
+            >USDA API KEY:
+            <input type="text" id="api-key-input" onchange="saveApiKey()" />
+          </label>
+
           <div>Need an API Key?</div>
           <a href="https://fdc.nal.usda.gov/api-key-signup.html"
             >Go here to request one from USDA</a
@@ -154,11 +152,11 @@
             <button onclick="resetColors()">defaults</button>
           </div>
           <div style="margin-top: 24px; font-size: larger">
-            Nutritions To Track
+            Nutrients To Track
           </div>
           <div>This will show those items up in your food logs</div>
           <div id="goals-settings-container"></div>
-          <button id="goal-add-button" onclick="addGoal()">+</button>
+          <button id="goal-add-button" onclick="addGoal()">Add Nutrient</button>
 
           <div style="margin-top: 24px">
             <p>Spiky Bites is a project developed by Ethan Jurman</p>
@@ -247,7 +245,7 @@
               Remove
             </button>
             <button id="save-new-button" onclick="saveDuplicateFoodItem()">
-              Save New
+              Log Again
             </button>
             <button id="save-button" onclick="saveCurrentFoodItem(false)">
               Update
@@ -255,7 +253,7 @@
           </div>
           <div class="button-row" id="food-item-save-button-row">
             <button id="save-button" onclick="saveCurrentFoodItem()">
-              Save
+              Add to Log
             </button>
           </div>
         </div>

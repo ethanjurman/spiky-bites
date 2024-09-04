@@ -46,7 +46,7 @@ function showPage(page) {
   history.pushState({}, "", `#${page}`);
 }
 
-function pageTransition(page) {
+function pageTransition(page = "food-add") {
   [...document.querySelectorAll('.content-wrapper')].forEach(entry => {
     entry.style.display = 'none';
   });

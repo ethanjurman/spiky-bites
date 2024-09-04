@@ -188,7 +188,7 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     const nutrientTypeInput = document.createElement('input');
     nutrientTypeInput.classList.add('nutirion-type-edit');
     nutrientTypeInput.setAttribute('list', 'nutrients');
-    nutrientTypeInput.setAttribute('placeholder', 'type');
+    nutrientTypeInput.setAttribute('placeholder', 'Nutrient');
     nutrientTypeInput.setAttribute('value', nutrient.nutrientName);
     nutrientTypeInput.onchange = (e) => {
       const closerString = getClosestOption(e.target.value, nutrientsStrings);
@@ -199,7 +199,7 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
 
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
-    nutrientAmountInput.setAttribute('placeholder', 'amount');
+    nutrientAmountInput.setAttribute('placeholder', 'Amount');
     nutrientAmountInput.setAttribute('value', isEditingFoodItem
       ? (nutrient.value / (currentFoodItem.amount / amount)).toFixed(2) // update the amount based on existing item
       : (nutrient.value * (amount / 100)).toFixed(2) // update the amount based on 100 default amount
@@ -215,7 +215,7 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     const nutrientTypeInput = document.createElement('input');
     nutrientTypeInput.classList.add('nutirion-type-edit');
     nutrientTypeInput.setAttribute('list', 'nutrients');
-    nutrientTypeInput.setAttribute('placeholder', 'type');
+    nutrientTypeInput.setAttribute('placeholder', 'Nutrient');
     nutrientTypeInput.onchange = (e) => {
       const closerString = getClosestOption(e.target.value, nutrientsStrings);
       if (closerString !== e.target.value) {
@@ -229,7 +229,7 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
 
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
-    nutrientAmountInput.setAttribute('placeholder', 'amount');
+    nutrientAmountInput.setAttribute('placeholder', 'Amount');
 
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);

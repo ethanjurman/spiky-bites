@@ -36,7 +36,7 @@ function renderGoalSettings() {
       const goalType = document.createElement("input");
       goalType.setAttribute('list', 'nutrients');
       goalType.value = goalData.type;
-      goalType.placeholder = "Type";
+      goalType.placeholder = "Nutrition";
       goalType.onchange = (e) => {
         const closerString = getClosestOption(e.target.value, nutrientsStrings);
         if (closerString !== e.target.value) {

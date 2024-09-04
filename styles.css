@@ -397,8 +397,15 @@ input {
 
 #food-log-top-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#load-date-wrapper {
+  display: grid;
+  max-width: 200px;
 }
 
 #food-edit-amount-wrapper {

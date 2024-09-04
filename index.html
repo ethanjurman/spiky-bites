@@ -14,6 +14,7 @@
     <script type="text/javascript" src="moment.js"></script>
     <script type="text/javascript" src="idbkeyval.js"></script>
     <script type="text/javascript" src="levenshteinDistance.js"></script>
+    <script type="text/javascript" src="csvDownload.js"></script>
     <script defer type="text/javascript" src="nutrients.js"></script>
     <script defer type="text/javascript" src="settings.js"></script>
     <script defer type="text/javascript" src="foodLog.js"></script>
@@ -305,7 +306,14 @@
               style="filter: brightness(0)"
             />
           </button>
-          <div>
+          <button class="page-button" onclick="downloadAsCSV()">
+            <img
+              src="images/download_icon.svg"
+              alt="back arrow"
+              style="filter: brightness(0)"
+            />
+          </button>
+          <div id="load-date-wrapper">
             Load from date:
             <input
               type="date"

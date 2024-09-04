@@ -25,6 +25,8 @@ async function searchFoods() {
   itemWrapper.style.display = 'none';
   const networkFailedElement = document.getElementById('network-failed');
   networkFailedElement.style.display = 'none';
+  const noResultsElement = document.getElementById('no-results');
+  noResultsElement.style.display = 'none';
   const spinner = document.getElementById('grid-food-items-spinner');
   spinner.style.display = '';
   try {
@@ -32,18 +34,21 @@ async function searchFoods() {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    itemWrapper.style.display = '';
-    const spinner = document.getElementById('grid-food-items-spinner');
-    spinner.style.display = 'none';
 
     const json = await response.json();
-    updateFoodItemListingStyle('1fr 1fr 1fr');
-    updateSelectableFoodItems(json.foods, 0);
+    if (json.foods.length > 0) {
+      itemWrapper.style.display = '';
+      spinner.style.display = 'none';
+      updateFoodItemListingStyle('1fr 1fr 1fr');
+      updateSelectableFoodItems(json.foods, 0);
+    } else {
+      spinner.style.display = 'none';
+      noResultsElement.style.display = '';
+    }
   } catch (err) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     const spinner = document.getElementById('grid-food-items-spinner');
     spinner.style.display = 'none';
-    const networkFailedElement = document.getElementById('network-failed');
     networkFailedElement.style.display = '';
     console.error(err);
   }

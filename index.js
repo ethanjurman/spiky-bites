@@ -44,6 +44,7 @@ async function searchFoods() {
 
 function showPage(page) {
   history.pushState({}, "", `#${page}`);
+  pageTransition(page);
 }
 
 function pageTransition(page = "food-add") {
@@ -60,8 +61,8 @@ function pageTransition(page = "food-add") {
   }
 }
 
-window.navigation.addEventListener("navigate", (event) => {
-  pageTransition(event.destination.url.split('#')[1]);
+addEventListener("popstate", (event) => {
+  pageTransition(event.target.window.location.href.split('#')[1]);
 });
 
 function updateGoalTracker() {

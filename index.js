@@ -1,6 +1,12 @@
 
 document.documentElement.className = 'theme';
 
+let currentFoodItem = {};
+
+if (window.location.href.split('#')[1]) {
+  pageTransition(window.location.href.split('#')[1])
+}
+
 async function searchFoods() {
   const searchTerm = document.getElementById("search").value;
   if (searchTerm === '') {
@@ -37,6 +43,10 @@ async function searchFoods() {
 }
 
 function showPage(page) {
+  history.pushState({}, "", `#${page}`);
+}
+
+function pageTransition(page) {
   [...document.querySelectorAll('.content-wrapper')].forEach(entry => {
     entry.style.display = 'none';
   });
@@ -49,6 +59,10 @@ function showPage(page) {
     currentFoodItem = {};
   }
 }
+
+window.navigation.addEventListener("navigate", (event) => {
+  pageTransition(event.destination.url.split('#')[1]);
+});
 
 function updateGoalTracker() {
   const goalTracker = document.getElementById("goal-tracker");
@@ -107,7 +121,6 @@ function updateSelectableFoodItems(foodItems, start) {
   }
 }
 
-let currentFoodItem = {};
 
 function loadFood(foodItem, amount = 100, editItem = 0) {
   isEditingFoodItem = editItem !== 0;
@@ -271,3 +284,4 @@ function clearAllData() {
 }
 
 updateGoalTracker();
+

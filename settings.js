@@ -4,6 +4,7 @@ get('background-color').then(color => {
   const value = color || '#40798c';
   document.documentElement.style.setProperty('--color-background', value)
   document.getElementById('background-color').value = value;
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', value);
 });
 get('button-color').then(color => {
   const value = color || '#ffffff';
@@ -94,4 +95,7 @@ function updateColor(key) {
   const newValue = document.getElementById(`${key}-color`).value;
   set(`${key}-color`, document.getElementById(`${key}-color`).value)
   document.documentElement.style.setProperty(`--color-${key}`, newValue);
+  if (key === 'background') {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', newValue);
+  }
 }

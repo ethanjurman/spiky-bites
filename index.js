@@ -37,6 +37,7 @@ async function searchFoods() {
     spinner.style.display = 'none';
 
     const json = await response.json();
+    updateFoodItemListingStyle('1fr 1fr 1fr');
     updateSelectableFoodItems(json.foods, 0);
   } catch (err) {
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -45,6 +46,27 @@ async function searchFoods() {
     const networkFailedElement = document.getElementById('network-failed');
     networkFailedElement.style.display = '';
     console.error(err);
+  }
+}
+
+function adjustSearchFontSize() {
+  const searchElement = document.getElementById("search")
+  searchElement.style.fontSize = Math.max(Math.min(searchElement.clientWidth / searchElement.value.length, '24'), '12');
+}
+
+function updateFoodItemListingStyle(style) {
+  if (style) {
+    document.getElementById("grid-food-items-wrapper").style.gridTemplateColumns = style;
+  }
+  document.getElementById("search-view-grid").style.display = 'none';
+  document.getElementById("search-view-list").style.display = 'none';
+  if (style === '1fr 1fr 1fr') {
+    document.querySelector(".grid-search-wrapper").style.gridTemplateColumns = 'auto 1fr auto auto auto';
+    document.getElementById("search-view-list").style.display = '';
+  }
+  if (style === '1fr') {
+    document.querySelector(".grid-search-wrapper").style.gridTemplateColumns = 'auto 1fr auto auto auto';
+    document.getElementById("search-view-grid").style.display = '';
   }
 }
 

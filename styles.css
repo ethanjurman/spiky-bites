@@ -45,7 +45,7 @@ html > * {
   background-position: 15px 50%;
   background-size: 30px;
   padding-left: 50px;
-  padding-right: 50px;
+  padding-right: 12px;
 }
 
 #food-edit-name {
@@ -136,6 +136,7 @@ html > * {
   cursor: pointer;
   transition: all 0.1s;
   padding: 10px;
+  container-name: foodButton;
 }
 .food-button > div {
   text-overflow: ellipsis;

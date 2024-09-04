@@ -89,8 +89,33 @@
             type="text"
             id="search"
             placeholder="Food Search"
+            oninput="adjustSearchFontSize()"
             onchange="searchFoods()"
           />
+          <button
+            id="search-view-grid"
+            class="page-button"
+            onclick="updateFoodItemListingStyle('1fr 1fr 1fr')"
+            style="display: none"
+          >
+            <img
+              src="images/grids_icon.svg"
+              alt="pencil icon"
+              style="filter: brightness(0)"
+            />
+          </button>
+          <button
+            id="search-view-list"
+            class="page-button"
+            onclick="updateFoodItemListingStyle('1fr')"
+            style="display: none"
+          >
+            <img
+              src="images/rows_icon.svg"
+              alt="pencil icon"
+              style="filter: brightness(0)"
+            />
+          </button>
           <button class="page-button" onclick="showPage('food-create')">
             <img
               src="images/edit_icon.svg"

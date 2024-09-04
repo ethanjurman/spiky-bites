@@ -124,6 +124,7 @@ function updateGoalTracker() {
 
 function updateSelectableFoodItems(foodItems, start) {
   const itemWrapper = document.getElementById('grid-food-items-wrapper');
+  itemWrapper.scrollTop = 0;
   const PAGE_SIZE = Math.min((Math.floor(itemWrapper.clientHeight / (110)) * 3) - 1, 20);
   itemWrapper.innerHTML = "";
   const hasMore = foodItems.length > start + PAGE_SIZE;

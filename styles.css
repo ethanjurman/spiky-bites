@@ -103,13 +103,14 @@ html > * {
 .grid-search-wrapper {
   display: grid;
   gap: 10px;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
 }
 
 #grid-food-items-wrapper {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: minmax(100px, auto);
   height: 100%;
   overflow: auto;
   /* icon */

@@ -2,6 +2,12 @@
 document.documentElement.className = 'theme';
 
 let currentFoodItem = {};
+let isNewItem = false;
+
+if (window.location.href.split('#')[1] === 'food-edit') {
+  currentFoodItem = {};
+  loadFood({ description: "", foodNutrients: [] }, 100, 0, true);
+}
 
 if (window.location.href.split('#')[1]) {
   pageTransition(window.location.href.split('#')[1])
@@ -48,6 +54,12 @@ function showPage(page) {
 }
 
 function pageTransition(page = "food-add") {
+  if (page === 'food-create') {
+    currentFoodItem = {};
+    loadFood({ description: "", foodNutrients: [] }, 100, 0, true);
+    pageTransition('food-edit');
+    return;
+  }
   [...document.querySelectorAll('.content-wrapper')].forEach(entry => {
     entry.style.display = 'none';
   });
@@ -122,10 +134,10 @@ function updateSelectableFoodItems(foodItems, start) {
   }
 }
 
-
-function loadFood(foodItem, amount = 100, editItem = 0) {
+function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
   isEditingFoodItem = editItem !== 0;
   currentFoodItem = foodItem;
+  isNewItem = createNewItem;
   if (isEditingFoodItem) {
     document.getElementById('food-item-edit-button-row').style.display = '';
     document.getElementById('food-item-save-button-row').style.display = 'none';
@@ -136,11 +148,11 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-add')
   }
   document.getElementById('food-edit-amount').value = amount;
-  document.getElementById('food-edit-name').value = foodItem.description;
+  document.getElementById('food-edit-name').value = currentFoodItem.description;
   document.getElementById('food-edit-name').onchange = (e) => currentFoodItem.description = e.target.value;
   const nutritionSection = document.getElementById('nutrition-edit');
   nutritionSection.innerHTML = '';
-  foodItem.foodNutrients.forEach(nutrient => {
+  currentFoodItem.foodNutrients.forEach(nutrient => {
     if (nutrientIdsIgnoreList.includes(nutrient.nutrientId)) {
       return; // skip nutrients that we don't support
     }
@@ -161,51 +173,13 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'amount');
     nutrientAmountInput.setAttribute('value', isEditingFoodItem
-      ? (nutrient.value / (foodItem.amount / amount)).toFixed(2) // update the amount based on existing item
+      ? (nutrient.value / (currentFoodItem.amount / amount)).toFixed(2) // update the amount based on existing item
       : (nutrient.value * (amount / 100)).toFixed(2) // update the amount based on 100 default amount
     );
 
     nutrientItem.appendChild(nutrientTypeInput);
     nutrientItem.appendChild(nutrientAmountInput);
     nutritionSection.appendChild(nutrientItem);
-
-    // edit food amount options
-    const foodAmountOptionsElement = document.getElementById('food-edit-amount-options')
-    foodAmountOptionsElement.innerHTML = '';
-    const hasFoodMeasureItems = foodItem.foodMeasures && foodItem.foodMeasures.length > 0;
-    if (hasFoodMeasureItems) {
-      foodItem.foodMeasures.forEach(measure => {
-        const unknownOption = measure.disseminationText == 'Quantity not specified';
-        if (unknownOption && foodItem.foodMeasures.filter(m => m.gramWeight === measure.gramWeight).length > 1) {
-          // this is basically a duplicate option, so we can ignore it
-          return;
-        }
-        const amountOptionButton = document.createElement('button');
-        amountOptionButton.innerText = measure.disseminationText === 'Quantity not specified' ? `${measure.gramWeight}g` : measure.disseminationText
-        amountOptionButton.onclick = () => {
-          document.getElementById('food-edit-amount').value = measure.gramWeight;
-          updateFoodValuesFromAmount(measure.gramWeight);
-        };
-
-        foodAmountOptionsElement.appendChild(amountOptionButton);
-      });
-    }
-    if (foodItem.servingSize) {
-      const amountOptionButton = document.createElement('button');
-      const servingSize = foodItem.servingSize.toFixed(2);
-      amountOptionButton.innerText = foodItem.householdServingFullText ? foodItem.householdServingFullText : `${servingSize} (${foodItem.servingSizeUnit})`
-      amountOptionButton.onclick = () => {
-        document.getElementById('food-edit-amount').value = servingSize;
-        updateFoodValuesFromAmount(servingSize);
-      };
-
-      foodAmountOptionsElement.appendChild(amountOptionButton);
-    }
-    if (!hasFoodMeasureItems && !foodItem.servingSize) {
-      document.getElementById('serving-size-wrapper').style.display = 'none'
-    } else {
-      document.getElementById('serving-size-wrapper').style.display = ''
-    }
   });
 
   const addNutritionField = () => {
@@ -234,11 +208,53 @@ function loadFood(foodItem, amount = 100, editItem = 0) {
     nutritionSection.appendChild(nutrientItem);
   }
   addNutritionField();
+
+  // edit food amount options
+  const foodAmountOptionsElement = document.getElementById('food-edit-amount-options')
+  foodAmountOptionsElement.innerHTML = '';
+  const hasFoodMeasureItems = currentFoodItem.foodMeasures && currentFoodItem.foodMeasures.length > 0;
+  if (hasFoodMeasureItems) {
+    currentFoodItem.foodMeasures.forEach(measure => {
+      const unknownOption = measure.disseminationText == 'Quantity not specified';
+      if (unknownOption && currentFoodItem.foodMeasures.filter(m => m.gramWeight === measure.gramWeight).length > 1) {
+        // this is basically a duplicate option, so we can ignore it
+        return;
+      }
+      const amountOptionButton = document.createElement('button');
+      amountOptionButton.innerText = measure.disseminationText === 'Quantity not specified' ? `${measure.gramWeight}g` : measure.disseminationText
+      amountOptionButton.onclick = () => {
+        document.getElementById('food-edit-amount').value = measure.gramWeight;
+        updateFoodValuesFromAmount(measure.gramWeight);
+      };
+
+      foodAmountOptionsElement.appendChild(amountOptionButton);
+    });
+  }
+  if (currentFoodItem.servingSize) {
+    const amountOptionButton = document.createElement('button');
+    const servingSize = currentFoodItem.servingSize.toFixed(2);
+    amountOptionButton.innerText = currentFoodItem.householdServingFullText
+      ? currentFoodItem.householdServingFullText
+      : `${servingSize} (${currentFoodItem.servingSizeUnit})`
+    amountOptionButton.onclick = () => {
+      document.getElementById('food-edit-amount').value = servingSize;
+      updateFoodValuesFromAmount(servingSize);
+    };
+
+    foodAmountOptionsElement.appendChild(amountOptionButton);
+  }
+  if (!hasFoodMeasureItems && !currentFoodItem.servingSize) {
+    document.getElementById('serving-size-wrapper').style.display = 'none'
+  } else {
+    document.getElementById('serving-size-wrapper').style.display = ''
+  }
 }
 
 function updateFoodValuesFromAmount() {
   const newAmount = parseFloat(document.getElementById('food-edit-amount').value);
-  loadFood(currentFoodItem, newAmount, currentFoodItem.time);
+  if (!isNewItem) {
+    loadFood(currentFoodItem, newAmount, currentFoodItem.time);
+  }
 }
 
 function removeFoodItem() {

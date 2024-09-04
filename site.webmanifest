@@ -21,5 +21,7 @@
   "lang": "en-US",
   "name": "Spiky Bites - Nutrition Tracker",
   "short_name": "Spiky Bites",
+  "start_url": "https://ethanjurman.github.io/spiky-bites/",
+  "scope": "https://ethanjurman.github.io/spiky-bites/",
   "id": "https://ethanjurman.github.io/spiky-bites/"
 }

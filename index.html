@@ -2,7 +2,10 @@
   <head>
     <link rel="stylesheet" href="styles.css" />
     <meta name="theme-color" content="#40798c" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -268,7 +271,37 @@
             value="100"
             onchange="updateFoodValuesFromAmount()"
           />
-          <div id="unit">g</div>
+          <select
+            name="measure"
+            id="food-edit-amount-unit"
+            onchange="updateMeasure()"
+          >
+            <option value="mg">milligrams (mg)</option>
+            <option value="g" selected>grams (g)</option>
+            <option value="kg">kilograms (kg)</option>
+            <option value="oz">ounces (oz)</option>
+            <option value="lb">pound (lb)</option>
+            <option value="tsp">teaspoon (tsp)</option>
+            <option value="tbsp">tablespoon (tbsp)</option>
+            <option value="fl_oz">fluid ounces (fl oz)</option>
+            <option value="ml">milliliters (ml)</option>
+            <option value="c">cup (c)</option>
+            <option value="pt">pint (pt)</option>
+            <option value="qt">quart (qt)</option>
+            <option value="L">liter (L)</option>
+            <option value="gal">gallon (gal)</option>
+            <option value="dash">dash</option>
+            <option value="pinch">pinch</option>
+            <option value="slice">slice</option>
+            <option value="piece">piece</option>
+            <option value="clove">clove</option>
+            <option value="stick">stick</option>
+            <option value="can">can</option>
+            <option value="bottle">bottle</option>
+            <option value="pkg">package (pkg)</option>
+            <option value="serving">serving</option>
+            <option value="bowls">bowls</option>
+          </select>
         </div>
         <div id="nutrition-edit"></div>
         <div id="spacer" style="flex: 1"></div>
@@ -289,9 +322,12 @@
             </button>
           </div>
           <div class="button-row" id="food-item-save-button-row">
-            <button id="save-button" onclick="saveCurrentFoodItem()">
-              Add to Log
-            </button>
+            <div style="display: grid">
+              <input id="save-date" type="datetime-local" name="save-date" />
+              <button id="save-button" onclick="saveCurrentFoodItem()">
+                Add to Log
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -306,13 +342,16 @@
               style="filter: brightness(0)"
             />
           </button>
-          <button class="page-button" onclick="downloadAsCSV()">
-            <img
-              src="images/download_icon.svg"
-              alt="back arrow"
-              style="filter: brightness(0)"
-            />
-          </button>
+          <div id="load-date-wrapper">
+            Download CSV:
+            <button id="download-button" onclick="downloadAsCSV()">
+              <img
+                src="images/download_icon.svg"
+                alt="back arrow"
+                style="filter: brightness(0)"
+              />
+            </button>
+          </div>
           <div id="load-date-wrapper">
             Load from date:
             <input

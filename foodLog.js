@@ -57,7 +57,8 @@ async function loadFoodLogs(dayStart = 0, dayEnd = 7) {
         description: foodItem.name,
         foodNutrients: foodItem.nutrients.map(n => ({ nutrientName: n.name, value: n.value })),
         amount: foodItem.amount,
-        time: foodItem.time
+        time: foodItem.time,
+        unitMeasure: foodItem.unitMeasure
       }
       const itemElement = document.createElement('button');
       itemElement.classList.add('food-button');

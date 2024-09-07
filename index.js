@@ -2,19 +2,58 @@
 document.documentElement.className = 'theme';
 
 let currentFoodItem = {};
+let amountValue = 100;
 let isNewItem = false;
+let totalHits = 0;
+const PAGE_SIZE = 48;
+
+const unitConversion = {
+  "mg": 0.001,
+  "g": 1,
+  "kg": 1000,
+  "oz": 28.35,
+  "lb": 453.59,
+  "tsp": 4.76,
+  "tbsp": 14.3,
+  "fl_oz": 29.57,
+  "ml": 1,
+  "c": 240,
+  "pt": 473.18,
+  "qt": 946.35,
+  "L": 1000,
+  "gal": 3785.41,
+  "dash": 0.6,
+  "pinch": 0.3,
+  "slice": 30,
+  "piece": 75,
+  "clove": 5,
+  "stick": 113.4,
+  "pkg": null,
+  "bottle": null,
+  "can": 400
+}
+
+function clearCurrentFoodItem() {
+  currentFoodItem = {};
+  amountValue = 100;
+  document.getElementById('food-edit-amount-unit').value = 'g';
+  document.getElementById('food-edit-amount').value = amountValue;
+  loadFood({ description: "", foodNutrients: [] }, 0, true);
+}
+
+document.getElementById('save-date').value = moment().format('YYYY-MM-DDTHH:mm');
 
 if (window.location.href.split('#')[1] === 'food-edit') {
-  currentFoodItem = {};
-  loadFood({ description: "", foodNutrients: [] }, 100, 0, true);
+  clearCurrentFoodItem();
 }
 
 if (window.location.href.split('#')[1]) {
   pageTransition(window.location.href.split('#')[1])
 }
 
-async function searchFoods() {
-  const searchTerm = document.getElementById("search").value;
+async function searchFoods(pageNumber = 1) {
+  const searchElement = document.getElementById("search");
+  const searchTerm = searchElement.value;
   if (searchTerm === '') {
     return;
   }
@@ -30,17 +69,19 @@ async function searchFoods() {
   const spinner = document.getElementById('grid-food-items-spinner');
   spinner.style.display = '';
   try {
-    const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${searchTerm}`);
+    searchElement.blur();
+    const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${searchTerm}&pageNumber=${pageNumber}&pageSize=${PAGE_SIZE}`);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
 
     const json = await response.json();
     if (json.foods.length > 0) {
+      totalHits = json.totalHits;
       itemWrapper.style.display = '';
       spinner.style.display = 'none';
       updateFoodItemListingStyle('1fr 1fr 1fr');
-      updateSelectableFoodItems(json.foods, 0);
+      updateSelectableFoodItems(json.foods, 0, pageNumber);
     } else {
       spinner.style.display = 'none';
       noResultsElement.style.display = '';
@@ -82,8 +123,7 @@ function showPage(page) {
 
 function pageTransition(page = "food-add") {
   if (page === 'food-create') {
-    currentFoodItem = {};
-    loadFood({ description: "", foodNutrients: [] }, 100, 0, true);
+    clearCurrentFoodItem();
     pageTransition('food-edit');
     return;
   }
@@ -96,7 +136,7 @@ function pageTransition(page = "food-add") {
     loadFoodLogs();
   }
   if (page !== 'food-edit') {
-    currentFoodItem = {};
+    clearCurrentFoodItem();
   }
 }
 
@@ -126,8 +166,7 @@ function updateGoalTracker() {
   });
 }
 
-
-function updateSelectableFoodItems(foodItems, start) {
+function updateSelectableFoodItems(foodItems, start, pageNumber = 1) {
   const itemWrapper = document.getElementById('grid-food-items-wrapper');
   itemWrapper.scrollTop = 0;
   const PAGE_SIZE = Math.min((Math.floor(itemWrapper.clientHeight / (110)) * 3) - 1, 20);
@@ -141,7 +180,17 @@ function updateSelectableFoodItems(foodItems, start) {
     backElement.innerHTML = `
       <img src="images/arrow_back_icon.svg" alt="previous items" style="filter: brightness(0);" />
     `
-    backElement.onclick = () => updateSelectableFoodItems(foodItems, Math.max(start <= PAGE_SIZE ? 0 : start - (PAGE_SIZE - 1), 0));
+    backElement.onclick = () => updateSelectableFoodItems(foodItems, Math.max(start <= PAGE_SIZE ? 0 : start - (PAGE_SIZE - 1), 0), pageNumber);
+    itemWrapper.appendChild(backElement);
+  }
+  if (pageNumber > 1 && start === 0) {
+    // add food item that is a back button
+    const backElement = document.createElement('button');
+    backElement.classList.add('food-button');
+    backElement.innerHTML = `
+      <img src="images/arrow_back_icon.svg" alt="previous items" style="filter: brightness(0);" />
+    `
+    backElement.onclick = () => searchFoods(pageNumber + 1);
     itemWrapper.appendChild(backElement);
   }
   foodItems.slice(start, end).forEach(item => {
@@ -157,16 +206,25 @@ function updateSelectableFoodItems(foodItems, start) {
     loadMoreElement.innerHTML = `
       <img src="images/more_icon.svg" alt="more items" style="filter: brightness(0);" />
     `
-    loadMoreElement.onclick = () => updateSelectableFoodItems(foodItems, end);
+    loadMoreElement.onclick = () => updateSelectableFoodItems(foodItems, end, pageNumber);
+    itemWrapper.appendChild(loadMoreElement);
+  }
+  if (totalHits > (PAGE_SIZE * pageNumber) && !hasMore) {
+    const loadMoreElement = document.createElement('button');
+    loadMoreElement.classList.add('food-button');
+    loadMoreElement.innerHTML = `
+      <img src="images/more_icon.svg" alt="more items" style="filter: brightness(0);" />
+    `
+    loadMoreElement.onclick = () => searchFoods(pageNumber + 1);
     itemWrapper.appendChild(loadMoreElement);
   }
 }
 
-function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
-  isEditingFoodItem = editItem !== 0;
+function loadFood(foodItem, editItem = 0, createNewItem = false) {
+  const isEditingExistingFoodItem = editItem !== 0;
   currentFoodItem = foodItem;
   isNewItem = createNewItem;
-  if (isEditingFoodItem) {
+  if (isEditingExistingFoodItem) {
     document.getElementById('food-item-edit-button-row').style.display = '';
     document.getElementById('food-item-save-button-row').style.display = 'none';
     document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-log')
@@ -175,7 +233,11 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     document.getElementById('food-item-edit-button-row').style.display = 'none';
     document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-add')
   }
-  document.getElementById('food-edit-amount').value = amount;
+  if (foodItem.amount) {
+    amountValue = foodItem.amount;
+    document.getElementById('food-edit-amount').value = amountValue.toFixed(2);
+  }
+  document.getElementById('food-edit-amount-unit').value = foodItem.unitMeasure || 'g';
   document.getElementById('food-edit-name').value = currentFoodItem.description;
   document.getElementById('food-edit-name').onchange = (e) => currentFoodItem.description = e.target.value;
   const nutritionSection = document.getElementById('nutrition-edit');
@@ -191,6 +253,9 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     nutrientTypeInput.setAttribute('placeholder', 'Nutrient');
     nutrientTypeInput.setAttribute('value', nutrient.nutrientName);
     nutrientTypeInput.onchange = (e) => {
+      if (e.target.value === '') {
+        nutrientItem.parentElement.removeChild(nutrientItem);
+      }
       const closerString = getClosestOption(e.target.value, nutrientsStrings);
       if (closerString !== e.target.value) {
         e.target.value = closerString;
@@ -200,9 +265,10 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     const nutrientAmountInput = document.createElement('input');
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'Amount');
-    nutrientAmountInput.setAttribute('value', isEditingFoodItem
-      ? (nutrient.value / (currentFoodItem.amount / amount)).toFixed(2) // update the amount based on existing item
-      : (nutrient.value * (amount / 100)).toFixed(2) // update the amount based on 100 default amount
+    const unitMeasureRatio = unitConversion[currentFoodItem.unitMeasure] || 1;
+    nutrientAmountInput.setAttribute('value', isEditingExistingFoodItem
+      ? ((nutrient.value / (currentFoodItem.amount / amountValue)) * (unitMeasureRatio / (unitConversion[currentFoodItem.unitMeasure] || 1))).toFixed(2) // update the amount based on existing item
+      : ((nutrient.value * (amountValue / 100)) * unitMeasureRatio).toFixed(2) // update the amount based on 100 default amount
     );
 
     nutrientItem.appendChild(nutrientTypeInput);
@@ -217,6 +283,9 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
     nutrientTypeInput.setAttribute('list', 'nutrients');
     nutrientTypeInput.setAttribute('placeholder', 'Nutrient');
     nutrientTypeInput.onchange = (e) => {
+      if (e.target.value === '') {
+        nutrientItem.parentElement.removeChild(nutrientItem);
+      }
       const closerString = getClosestOption(e.target.value, nutrientsStrings);
       if (closerString !== e.target.value) {
         e.target.value = closerString;
@@ -251,8 +320,9 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
       const amountOptionButton = document.createElement('button');
       amountOptionButton.innerText = measure.disseminationText === 'Quantity not specified' ? `${measure.gramWeight}g` : measure.disseminationText
       amountOptionButton.onclick = () => {
-        document.getElementById('food-edit-amount').value = measure.gramWeight;
-        updateFoodValuesFromAmount(measure.gramWeight);
+        amountValue = measure.gramWeight / unitConversion[currentFoodItem.unitMeasure || 'g']
+        document.getElementById('food-edit-amount').value = amountValue.toFixed(2);
+        updateFoodValuesFromAmount();
       };
 
       foodAmountOptionsElement.appendChild(amountOptionButton);
@@ -261,12 +331,15 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
   if (currentFoodItem.servingSize) {
     const amountOptionButton = document.createElement('button');
     const servingSize = currentFoodItem.servingSize.toFixed(2);
-    amountOptionButton.innerText = currentFoodItem.householdServingFullText
+    amountOptionButton.innerText = currentFoodItem.householdServingFullText && currentFoodItem.householdServingFullText !== 'None'
       ? currentFoodItem.householdServingFullText
       : `${servingSize} (${currentFoodItem.servingSizeUnit})`
     amountOptionButton.onclick = () => {
-      document.getElementById('food-edit-amount').value = servingSize;
-      updateFoodValuesFromAmount(servingSize);
+      amountValue = parseInt(servingSize);
+      document.getElementById('food-edit-amount').value = amountValue.toFixed(2);
+      currentFoodItem.unitMeasure = 'g';
+      document.getElementById('food-edit-amount-unit').value = 'g';
+      updateFoodValuesFromAmount();
     };
 
     foodAmountOptionsElement.appendChild(amountOptionButton);
@@ -278,10 +351,19 @@ function loadFood(foodItem, amount = 100, editItem = 0, createNewItem = false) {
   }
 }
 
+function updateMeasure() {
+  oldUnitMeasure = unitConversion[currentFoodItem.unitMeasure || 'g'];
+  currentFoodItem.unitMeasure = document.getElementById('food-edit-amount-unit').value;
+  const foodAmountElement = document.getElementById('food-edit-amount');
+  const currentAmount = amountValue;
+  amountValue = (currentAmount * oldUnitMeasure) / unitConversion[currentFoodItem.unitMeasure]
+  foodAmountElement.value = amountValue.toFixed(2);
+}
+
 function updateFoodValuesFromAmount() {
-  const newAmount = parseFloat(document.getElementById('food-edit-amount').value);
+  amountValue = parseFloat(document.getElementById('food-edit-amount').value);
   if (!isNewItem) {
-    loadFood(currentFoodItem, newAmount, currentFoodItem.time);
+    loadFood(currentFoodItem, currentFoodItem.time);
   }
 }
 
@@ -291,26 +373,39 @@ function removeFoodItem() {
 }
 
 function saveDuplicateFoodItem() {
-  saveCurrentFoodItem(new Date());
+  saveCurrentFoodItem(true);
   showPage('food-log');
 }
 
 function saveCurrentFoodItem(isNew = true) {
   const foodItemName = document.getElementById('food-edit-name').value;
-  const foodItemAmount = document.getElementById('food-edit-amount').value;
+  const foodItemAmount = amountValue;
   const nutrients = [...document.getElementById('nutrition-edit').children]
     .filter(element => element.children.length === 2 && element.children[0].value)
     .map(element => { return { name: element.children[0].value, value: element.children[1].value } });
 
   if (isNew) {
-    addFoodLogItem({ name: foodItemName, amount: foodItemAmount, nutrients, time: new Date() });
-    currentFoodItem = {};
+    addFoodLogItem({
+      name: foodItemName,
+      amount: foodItemAmount,
+      nutrients,
+      time: new Date(document.getElementById('save-date').value).getTime() + new Date().getMilliseconds(),
+      unitMeasure: currentFoodItem.unitMeasure ? currentFoodItem.unitMeasure : 'g'
+    });
+    clearCurrentFoodItem();
     showPage('food-add');
   } else {
-    updateFoodLogItem({ name: foodItemName, amount: foodItemAmount, nutrients, time: currentFoodItem.time });
-    currentFoodItem = {};
+    updateFoodLogItem({
+      name: foodItemName,
+      amount: foodItemAmount,
+      nutrients,
+      time: currentFoodItem.time,
+      unitMeasure: currentFoodItem.unitMeasure ? currentFoodItem.unitMeasure : 'g'
+    });
+    clearCurrentFoodItem();
     showPage('food-log');
   }
+  updateMeasure({ target: { value: 'g' } })
 }
 
 function showClearDataItem() {

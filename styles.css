@@ -9,10 +9,17 @@ html {
 }
 
 html > * {
-  color: #000000;
+  color: var(--color-text);
   font-family: "Righteous";
   font-weight: 400;
   font-style: normal;
+}
+
+div,
+p,
+a,
+label {
+  color: var(--color-button);
 }
 
 #screen {
@@ -26,7 +33,7 @@ html > * {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
 }
 
@@ -222,8 +229,14 @@ html > * {
 }
 
 button,
-input {
+input,
+select {
   background-color: var(--color-button);
+}
+
+input:-internal-autofill-selected {
+  background-color: var(--color-button) !important;
+  color: var(--color-text) !important;
 }
 
 button {
@@ -247,7 +260,8 @@ button.danger {
   color: black;
 }
 
-input {
+input,
+select {
   font-family: "Righteous";
   border: 3px solid #000000;
   border-width: 3px 8px 8px 3px;
@@ -410,6 +424,8 @@ input {
 
 #food-edit-amount-wrapper {
   display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
 }
 
 #unit {
@@ -439,6 +455,12 @@ input {
   align-items: center;
   gap: 10px;
   justify-content: center;
+}
+
+#download-button {
+  min-height: 20px;
+  min-width: 123px;
+  max-height: 35px;
 }
 
 @keyframes pop-in {

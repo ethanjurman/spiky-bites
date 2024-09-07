@@ -9,7 +9,7 @@ async function downloadAsCSV() {
     ["Name", "Amount (G)", "Time", ...(nutritionStrings.map(ns => ns.replaceAll(',', '')))],
     ...foodItems.map(food => [
       (food.name || "").replaceAll(',', ' - '),
-      food.amount,
+      food.amount * unitConversion[food.unitMeasure || 'g'],
       food.time,
       ...nutritionStrings.map(nKey => (food.nutrients.find(nutrient => nutrient.name === nKey) || { value: '0' }).value)
     ])

@@ -234,6 +234,13 @@ select {
   background-color: var(--color-button);
 }
 
+button > div,
+input > div,
+select > div {
+  background-color: var(--color-button);
+  color: var(--color-text);
+}
+
 input:-internal-autofill-selected {
   background-color: var(--color-button) !important;
   color: var(--color-text) !important;
@@ -315,6 +322,18 @@ select {
   position: relative;
   height: 20px;
   top: -16px;
+}
+
+.span-1 {
+  grid-column: span 1;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+.span-3 {
+  grid-column: span 3;
 }
 
 #cancel-button,

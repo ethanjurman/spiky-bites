@@ -5,7 +5,7 @@ let currentFoodItem = {};
 let amountValue = 100;
 let isNewItem = false;
 let totalHits = 0;
-const PAGE_SIZE = 48;
+let foodItemListStyle = '1fr 1fr 1fr'
 
 const unitConversion = {
   "mg": 0.001,
@@ -70,7 +70,23 @@ async function searchFoods(pageNumber = 1) {
   spinner.style.display = '';
   try {
     searchElement.blur();
-    const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${searchTerm}&pageNumber=${pageNumber}&pageSize=${PAGE_SIZE}`);
+    // const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}&query=${searchTerm}&pageNumber=${pageNumber}`);
+    const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${apiKey}`, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: searchTerm,
+        dataTypes: [
+          "Branded",
+          "Experimental",
+          "Foundation",
+          "SR Legacy",
+          "Survey (FNDDS)",
+        ],
+        requireAllWords: true,
+        pageNumber,
+      })
+    })
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -81,7 +97,7 @@ async function searchFoods(pageNumber = 1) {
       itemWrapper.style.display = '';
       spinner.style.display = 'none';
       updateFoodItemListingStyle('1fr 1fr 1fr');
-      updateSelectableFoodItems(json.foods, 0, pageNumber);
+      updateSelectableFoodItems(json.foods, pageNumber);
     } else {
       spinner.style.display = 'none';
       noResultsElement.style.display = '';
@@ -101,6 +117,7 @@ function adjustSearchFontSize() {
 }
 
 function updateFoodItemListingStyle(style) {
+  foodItemListStyle = style;
   if (style) {
     document.getElementById("grid-food-items-wrapper").style.gridTemplateColumns = style;
   }
@@ -114,6 +131,26 @@ function updateFoodItemListingStyle(style) {
     document.querySelector(".grid-search-wrapper").style.gridTemplateColumns = 'auto 1fr auto auto auto';
     document.getElementById("search-view-grid").style.display = '';
   }
+  // set more button to correct span
+  [
+    ...document.querySelectorAll('.span-3'),
+    ...document.querySelectorAll('.span-2'),
+    ...document.querySelectorAll('.span-1')
+  ].forEach(e => {
+    e.classList.remove('span-1');
+    e.classList.remove('span-2');
+    e.classList.remove('span-3');
+    e.classList.add('span-temp');
+  })
+
+  if (style === '1fr') {
+    [...document.querySelectorAll('.span-temp')].forEach(e => e.classList.add('span-1'));
+  }
+  if (style === '1fr 1fr 1fr') {
+    const foodButtonCount = document.querySelectorAll('.food-button').length - 1;
+    [...document.querySelectorAll('.span-temp')].forEach(e => { e.classList.add(`span${(foodButtonCount % 3) - 3}`) });
+  }
+  [...document.querySelectorAll('.span-temp')].forEach(e => e.classList.remove('span-temp'))
 }
 
 function showPage(page) {
@@ -166,52 +203,40 @@ function updateGoalTracker() {
   });
 }
 
-function updateSelectableFoodItems(foodItems, start, pageNumber = 1) {
+function updateSelectableFoodItems(foodItems, pageNumber = 1) {
   const itemWrapper = document.getElementById('grid-food-items-wrapper');
   itemWrapper.scrollTop = 0;
-  const PAGE_SIZE = Math.min((Math.floor(itemWrapper.clientHeight / (110)) * 3) - 1, 20);
   itemWrapper.innerHTML = "";
-  const hasMore = foodItems.length > start + PAGE_SIZE;
-  const end = (hasMore ? start + (PAGE_SIZE - 1) : start + PAGE_SIZE) + (start === 0 ? 1 : 0);
-  if (start > 0) {
+  // const hasMore = foodItems.length > start + PAGE_SIZE;
+  // const end = (hasMore ? start + (PAGE_SIZE - 1) : start + PAGE_SIZE) + (start === 0 ? 1 : 0);
+  let countFoodButtons = 0;
+  if (pageNumber > 1) {
     // add food item that is a back button
     const backElement = document.createElement('button');
     backElement.classList.add('food-button');
     backElement.innerHTML = `
       <img src="images/arrow_back_icon.svg" alt="previous items" style="filter: brightness(0);" />
     `
-    backElement.onclick = () => updateSelectableFoodItems(foodItems, Math.max(start <= PAGE_SIZE ? 0 : start - (PAGE_SIZE - 1), 0), pageNumber);
+    backElement.onclick = () => searchFoods(pageNumber - 1);
     itemWrapper.appendChild(backElement);
+    countFoodButtons += 1;
   }
-  if (pageNumber > 1 && start === 0) {
-    // add food item that is a back button
-    const backElement = document.createElement('button');
-    backElement.classList.add('food-button');
-    backElement.innerHTML = `
-      <img src="images/arrow_back_icon.svg" alt="previous items" style="filter: brightness(0);" />
-    `
-    backElement.onclick = () => searchFoods(pageNumber + 1);
-    itemWrapper.appendChild(backElement);
-  }
-  foodItems.slice(start, end).forEach(item => {
+  foodItems.forEach(item => {
     const itemElement = document.createElement('button');
     itemElement.classList.add('food-button');
     itemElement.innerHTML = `<div><b>${item.description}</b></div><div>${item.brandName ? item.brandName + ' ' : ''}${item.brandOwner ? item.brandOwner : ''}</div>`
     itemElement.onclick = () => { loadFood(item); showPage('food-edit'); }
     itemWrapper.appendChild(itemElement);
+    countFoodButtons += 1;
   })
-  if (hasMore) {
+  if (totalHits > 50 * pageNumber) {
     const loadMoreElement = document.createElement('button');
     loadMoreElement.classList.add('food-button');
-    loadMoreElement.innerHTML = `
-      <img src="images/more_icon.svg" alt="more items" style="filter: brightness(0);" />
-    `
-    loadMoreElement.onclick = () => updateSelectableFoodItems(foodItems, end, pageNumber);
-    itemWrapper.appendChild(loadMoreElement);
-  }
-  if (totalHits > (PAGE_SIZE * pageNumber) && !hasMore) {
-    const loadMoreElement = document.createElement('button');
-    loadMoreElement.classList.add('food-button');
+    if (foodItemListStyle === '1fr 1fr 1fr') {
+      loadMoreElement.classList.add(`span${(countFoodButtons % 3) - 3}`);
+    } else {
+      loadMoreElement.classList.add('span-1');
+    }
     loadMoreElement.innerHTML = `
       <img src="images/more_icon.svg" alt="more items" style="filter: brightness(0);" />
     `

@@ -261,7 +261,7 @@ function loadFood(foodItem, editItem = 0, createNewItem = false) {
     document.getElementById('food-edit-screen').querySelector('.page-button').onclick = () => showPage('food-add')
   }
   if (foodItem.amount) {
-    amountValue = foodItem.amount;
+    amountValue = Number(foodItem.amount);
     document.getElementById('food-edit-amount').value = amountValue.toFixed(2);
   }
   document.getElementById('food-edit-amount-unit').value = foodItem.unitMeasure || 'g';

@@ -314,9 +314,12 @@
             >
               Remove
             </button>
-            <button id="save-new-button" onclick="saveDuplicateFoodItem()">
-              Log Again
-            </button>
+            <div style="display: grid">
+              <input id="save-date" type="datetime-local" name="save-date" />
+              <button id="save-new-button" onclick="saveDuplicateFoodItem()">
+                Log Again
+              </button>
+            </div>
             <button id="save-button" onclick="saveCurrentFoodItem(false)">
               Update
             </button>

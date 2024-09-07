@@ -28,9 +28,11 @@ const unitConversion = {
   "piece": 75,
   "clove": 5,
   "stick": 113.4,
-  "pkg": null,
-  "bottle": null,
-  "can": 400
+  "pkg": 1,
+  "bottle": 1,
+  "serving": 1,
+  "can": 400,
+  "bowls": 1,
 }
 
 function clearCurrentFoodItem() {

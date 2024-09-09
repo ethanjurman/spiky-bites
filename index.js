@@ -113,6 +113,11 @@ async function searchFoods(pageNumber = 1) {
   }
 }
 
+function updateDates(e) {
+  const newValue = `${e.target.value}`;
+  [...document.querySelectorAll('.save-date')].forEach(e => e.value = newValue);
+}
+
 function adjustSearchFontSize() {
   const searchElement = document.getElementById("search")
   searchElement.style.fontSize = Math.max(Math.min(searchElement.clientWidth / searchElement.value.length, '24'), '12');
@@ -431,7 +436,7 @@ function saveCurrentFoodItem(isNew = true) {
       name: foodItemName,
       amount: foodItemAmount,
       nutrients,
-      time: new Date(document.getElementById('save-new-date').value).getTime() + new Date().getMilliseconds(),
+      time: new Date(document.querySelector('.save-date').value).getTime() + new Date().getMilliseconds(),
       unitMeasure: currentFoodItem.unitMeasure ? currentFoodItem.unitMeasure : 'g'
     });
     clearCurrentFoodItem();

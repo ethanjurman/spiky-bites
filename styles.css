@@ -95,7 +95,7 @@ label {
 .food-log-items-wrapper.grid-items {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   overflow: auto;
   margin-bottom: 4px;
 }

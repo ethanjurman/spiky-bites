@@ -5,7 +5,8 @@ let currentFoodItem = {};
 let amountValue = 100;
 let isNewItem = false;
 let totalHits = 0;
-let foodItemListStyle = '1fr 1fr 1fr'
+let foodItemListStyle = '1fr 1fr 1fr';
+let synced = true;
 
 const unitConversion = {
   "mg": 0.001,
@@ -36,14 +37,13 @@ const unitConversion = {
 }
 
 function clearCurrentFoodItem() {
-  currentFoodItem = {};
+  updateMeasure({ target: { value: 'g' } })
   amountValue = 100;
+  currentFoodItem = {};
   document.getElementById('food-edit-amount-unit').value = 'g';
   document.getElementById('food-edit-amount').value = amountValue;
   loadFood({ description: "", foodNutrients: [] }, 0, true);
 }
-
-document.getElementById('save-date').value = moment().format('YYYY-MM-DDTHH:mm');
 
 if (window.location.href.split('#')[1] === 'food-edit') {
   clearCurrentFoodItem();
@@ -163,6 +163,7 @@ function showPage(page) {
 function pageTransition(page = "food-add") {
   if (page === 'food-create') {
     clearCurrentFoodItem();
+    loadFood({ description: "", foodNutrients: [] }, 0, true);
     pageTransition('food-edit');
     return;
   }
@@ -249,8 +250,13 @@ function updateSelectableFoodItems(foodItems, pageNumber = 1) {
 
 function loadFood(foodItem, editItem = 0, createNewItem = false) {
   const isEditingExistingFoodItem = editItem !== 0;
-  currentFoodItem = foodItem;
+  currentFoodItem = { ...foodItem };
   isNewItem = createNewItem;
+  if (foodItem.time) {
+    [...document.querySelectorAll('.save-date')].forEach(e => e.value = moment(foodItem.time).format('YYYY-MM-DDTHH:mm'));
+  } else {
+    [...document.querySelectorAll('.save-date')].forEach(e => e.value = moment(new Date()).format('YYYY-MM-DDTHH:mm'));
+  }
   if (isEditingExistingFoodItem) {
     document.getElementById('food-item-edit-button-row').style.display = '';
     document.getElementById('food-item-save-button-row').style.display = 'none';
@@ -290,9 +296,11 @@ function loadFood(foodItem, editItem = 0, createNewItem = false) {
     }
 
     const nutrientAmountInput = document.createElement('input');
+    nutrientAmountInput.classList.add('nutrient-amount-input');
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'Amount');
     const unitMeasureRatio = unitConversion[currentFoodItem.unitMeasure] || 1;
+
     nutrientAmountInput.setAttribute('value', isEditingExistingFoodItem
       ? ((nutrient.value / (currentFoodItem.amount / amountValue)) * (unitMeasureRatio / (unitConversion[currentFoodItem.unitMeasure] || 1))).toFixed(2) // update the amount based on existing item
       : ((nutrient.value * (amountValue / 100)) * unitMeasureRatio).toFixed(2) // update the amount based on 100 default amount
@@ -324,6 +332,7 @@ function loadFood(foodItem, editItem = 0, createNewItem = false) {
     }
 
     const nutrientAmountInput = document.createElement('input');
+    nutrientAmountInput.classList.add('nutrient-amount-input');
     nutrientAmountInput.setAttribute('type', 'number');
     nutrientAmountInput.setAttribute('placeholder', 'Amount');
 
@@ -378,6 +387,12 @@ function loadFood(foodItem, editItem = 0, createNewItem = false) {
   }
 }
 
+function updateSync(enabled) {
+  document.getElementById('sync').style.display = enabled ? '' : 'none';
+  document.getElementById('sync-disabled').style.display = enabled ? 'none' : '';
+  synced = enabled;
+}
+
 function updateMeasure() {
   oldUnitMeasure = unitConversion[currentFoodItem.unitMeasure || 'g'];
   currentFoodItem.unitMeasure = document.getElementById('food-edit-amount-unit').value;
@@ -416,7 +431,7 @@ function saveCurrentFoodItem(isNew = true) {
       name: foodItemName,
       amount: foodItemAmount,
       nutrients,
-      time: new Date(document.getElementById('save-date').value).getTime() + new Date().getMilliseconds(),
+      time: new Date(document.getElementById('save-new-date').value).getTime() + new Date().getMilliseconds(),
       unitMeasure: currentFoodItem.unitMeasure ? currentFoodItem.unitMeasure : 'g'
     });
     clearCurrentFoodItem();

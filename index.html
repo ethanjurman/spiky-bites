@@ -264,6 +264,7 @@
           <div id="food-edit-amount-options"></div>
         </div>
         <div id="food-edit-amount-wrapper">
+          <div></div>
           <input
             type="number"
             id="food-edit-amount"
@@ -302,31 +303,51 @@
             <option value="serving">serving</option>
             <option value="bowls">bowls</option>
           </select>
+          <button id="sync" style="display: none" onclick="updateSync(false)">
+            <img
+              src="images/sync_icon.svg"
+              style="filter: brightness(0)"
+              alt="sync arrows"
+            />
+          </button>
+          <button
+            id="sync-disabled"
+            style="display: none"
+            onclick="updateSync(true)"
+          >
+            <img
+              src="images/sync_disabled_icon.svg"
+              style="filter: brightness(0)"
+              alt="sync arrows with a line through them"
+            />
+          </button>
         </div>
         <div id="nutrition-edit"></div>
         <div id="spacer" style="flex: 1"></div>
         <div>
           <div class="button-row" id="food-item-edit-button-row">
-            <button
-              id="remove-button"
-              class="danger"
-              onclick="removeFoodItem()"
-            >
-              Remove
-            </button>
-            <div style="display: grid">
-              <input id="save-date" type="datetime-local" name="save-date" />
-              <button id="save-new-button" onclick="saveDuplicateFoodItem()">
-                Log Again
-              </button>
+            <div style="display: grid; grid-template-rows: 1fr 1fr">
+              <input class="save-date" type="datetime-local" name="save-date" />
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                <button
+                  id="remove-button"
+                  class="danger"
+                  onclick="removeFoodItem()"
+                >
+                  Remove
+                </button>
+                <button id="save-new-button" onclick="saveDuplicateFoodItem()">
+                  Log Again
+                </button>
+                <button id="save-button" onclick="saveCurrentFoodItem(false)">
+                  Update
+                </button>
+              </div>
             </div>
-            <button id="save-button" onclick="saveCurrentFoodItem(false)">
-              Update
-            </button>
           </div>
           <div class="button-row" id="food-item-save-button-row">
             <div style="display: grid">
-              <input id="save-date" type="datetime-local" name="save-date" />
+              <input class="save-date" type="datetime-local" name="save-date" />
               <button id="save-button" onclick="saveCurrentFoodItem()">
                 Add to Log
               </button>

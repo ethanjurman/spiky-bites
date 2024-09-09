@@ -347,12 +347,6 @@ select {
   color: black;
 }
 
-.button-row#food-item-edit-button-row {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
 .button-row#food-item-save-button-row {
   display: grid;
   gap: 10px;
@@ -375,9 +369,12 @@ select {
 #nutrition-edit > div {
   display: grid;
   grid-template-columns: 4fr 1fr;
-  gap: 10px;
   margin: 0px 20px;
   margin-top: -8px;
+}
+
+.nutrient-amount-input {
+  min-width: 100px;
 }
 
 #nutrition-edit > div:nth-child(1) {
@@ -443,8 +440,18 @@ select {
 
 #food-edit-amount-wrapper {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto auto;
   justify-content: center;
+}
+
+#food-edit-amount,
+#food-edit-amount-unit {
+  max-width: 140px;
+}
+
+#sync,
+#sync-disabled {
+  margin-left: 10px;
 }
 
 #unit {
